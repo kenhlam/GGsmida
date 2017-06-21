@@ -1,0 +1,14 @@
+ ssh-keygen -t rsa -C "314778394@qq.com"   生成本地ssh
+ github  add ssh  github设置本地ssh
+ ssh -T git@github.com  测试ssh连接
+ git config --global user.name "bearface" 设置git配置
+ git config --global user.email "314778394@qq.com" 设置git配置
+
+
+ git init  生成本地仓库（在要上传的文件夹下git bash here）
+ github new repository 在github创建新仓库
+ git remote add origin URL 新仓库地址
+ git status  更新当前仓库与远程仓库状态比较
+ git add . (更新本地仓库全部文件)git add filename:更新某个文件
+ git commit -m "-m是添加注释"  提交当前目录到本地仓库
+ git push origin master 上传到远程仓库
