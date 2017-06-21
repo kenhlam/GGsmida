@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var ClassA = function() {  
+  			this.a = "a";  
+  			this.c = [];
+	  	};  
+	  	var ClassB = function() {  
+	  		this.b = "b";  
+	    };  
+	    ClassB.prototype = new ClassA();  
+	    var objB1 = new ClassB();  //创建子类实例时，无法向父类构造函数传参  (有参也不能传)
+	    var objB2 = new ClassB();  
+	    objB1.a = "change";  //简单型的   子类对象的写操作只访问子类对象的成员，相互之间不产生影响。写一定是写子类，读则要看是否子类中有，若有则读子类，若无则读原型。
+	    objB1.c.push(1,2,3);//引用型的
+	    alert(objB1.a);  // change  
+	    alert(objB2.a);  // a  
+	    alert(objB1.c);//123
+	    alert(objB2.c);//123
+
+
+	    //test
+	    function ClassC(){
+	    	ClassA.call(this);//相当于将ClassA中的代码在ClassC定义时执行了一遍  ClassA 与ClassC独门不影响
+	    }
+	    ClassC.prototype = new ClassA();
+	    var objC1 = new ClassC();
+	    var objC2 = new ClassC();
+	    objC1.c.push(4,5,6);
+	    alert(objC1.c);
+	    alert(objC2.c);
+
+	    // 定义一个动物类
+		function Animal (name) {
+		  // 属性
+		  this.name = name || 'Animal';
+		  // 实例方法
+		  this.sleep = function(){
+		    console.log(this.name + '正在睡觉！');
+		  }
+		}
+		// 原型方法
+		Animal.prototype.eat = function(food) {
+		  console.log(this.name + '正在吃：' + food);
+		};
+
+
+
+
+		//通过调用父类构造，继承父类的属性并保留传参的优点，然后通过将父类实例作为子类原型，实现函数复用	
+		function Cat(name){
+		  Animal.call(this);
+		  this.name = name || 'Tom';
+		}
+		Cat.prototype = new Animal();
+
+		// Test Code
+		var cat = new Cat();
+		console.log(cat.name);
+		console.log(cat.sleep());
+		console.log(cat instanceof Animal); // true
+		console.log(cat instanceof Cat); // true
+		//弥补了方式2的缺陷，可以继承实例属性/方法，也可以继承原型属性/方法
+		// 既是子类的实例，也是父类的实例
+		// 不存在引用属性共享问题
+		// 可传参
+		// 函数可复用
+		// 缺点：
+
+		// 调用了两次父类构造函数，生成了两份实例（子类实例将子类原型上的那份屏蔽了）
+
+
+
+
+
+		//通过寄生方式，砍掉父类的实例属性，这样，在调用两次父类的构造的时候，就不会初始化两次实例方法/属性，避免的组合继承的缺点
+		function Cat(name){
+		  Animal.call(this);
+		  this.name = name || 'Tom';
+		}
+		(function(){
+		  // 创建一个没有实例方法的类
+		  var Super = function(){};
+		  Super.prototype = Animal.prototype;
+		  //将实例作为子类的原型
+		  Cat.prototype = new Super();
+		})();
+
+		// Test Code
+		var cat = new Cat();
+		console.log(cat.name);
+		console.log(cat.sleep());
+		console.log(cat instanceof Animal); // true
+		console.log(cat instanceof Cat); //true
+
+
+
+		//实例 
+		function Animal (name) {
+		  // 属性
+		  this.name = name || 'Animal';
+		  // 实例方法
+		  this.sleep = function(){
+		    console.log(this.name + '正在睡觉！');
+		  }
+		  //实例引用属性
+		  this.features = [];
+		}
+		function Cat(name){
+		}
+		Cat.prototype = new Animal();
+
+		var tom = new Cat('Tom');
+		var kissy = new Cat('Kissy');
+
+		console.log(tom.name); // "Animal"
+		console.log(kissy.name); // "Animal"
+		console.log(tom.features); // []
+		console.log(kissy.features); // []
+
+		tom.name = 'Tom-New Name';
+		tom.features.push('eat');
+
+		//针对父类实例值类型成员的更改，不影响
+		console.log(tom.name); // "Tom-New Name"
+		console.log(kissy.name); // "Animal"
+		//针对父类实例引用类型成员的更改，会通过影响其他子类实例
+		console.log(tom.features); // ['eat']
+		console.log(kissy.features); // ['eat']
+
+		// 原因分析：
+
+		// 关键点：属性查找过程
+
+		// 执行tom.features.push，首先找tom对象的实例属性（找不到），
+		// 那么去原型对象中找，也就是Animal的实例。发现有，那么就直接在这个对象的
+		// features属性中插入值。
+		// 在console.log(kissy.features); 的时候。同上，kissy实例上没有，那么去原型上找。
+		// 刚好原型上有，就直接返回，但是注意，这个原型对象中features属性值已经变化了。
+
+
+		//call  apply
+	</script>
+</body>
+</html>

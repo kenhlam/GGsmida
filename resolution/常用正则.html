@@ -1,0 +1,222 @@
+﻿<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+        <title>JavaScript</title>
+		<script>
+		window.onload = function(){
+			/*
+				三三二三个一
+				三：
+			{}:限定该括号前面的一个字符所出现的次数
+			{m}:前面的字符连续出现m次
+			{m,}:前面的字符连续出现m到无限次，至少连续出现m次
+			{m,n}:前面字符连续出现m到n次。
+			[]：表示范围
+			():表示组
+			三：
+			*:等于{0,} 表示前面的字符可以连续出现0到无限次
+			+:等于{1,}表示前面的字符可以连续出现1到无限次
+			?:等于{0,1}表示前面的字符可以出现0到1次
+			二：
+			^: 定（断）头-限制字符串中的开头字符
+			$：定（断）尾-限制字符串中最后一个字符
+			三个一：
+			. ：模糊匹配，一个点(.)只能匹配一个字符
+			| :或者
+			\ :转义符 \.
+			\d :表示数字0-9    [0-9]
+			\D :表示非数字     [^0-9] ^用在中括号中表示取反
+			\w :表示字母数字下划线  [a-zA-Z0-9_]
+			\W:表示非（字母、数字、下划线） [^a-zA-Z0-9_]
+			\s :表示空白符
+			\S :表示非空白符
+			*/
+			//var re = new RegExp('a','i');
+			//var re1 = /study/g;
+			var oText = document.getElementById("text1");
+			var oBtn = document.getElementById("btn");
+			oBtn.onclick = function(){
+				var str = oText.value;
+				//alert(re1.test(str));
+				/*
+				if(!(re1.test(str))){
+					oText.value = "您输入的不合法";
+				}
+				*/
+				//alert(re1.exec(str));
+				//alert(str.match(re1));
+				//alert(str.search(re1));
+				//alert(str.indexOf(re1));
+				//oText.value = str.replace(re1,"hehe");
+				//oText.value = str.split(re1);
+				//var reg = /[a-zA-Z0-9\-_]{2,4}/
+				//var reg = /^我爱[\u4e00-\u9fa5]*人$/;
+				//var reg = /^我爱[\u4e00-\u9fa5]+人$/;
+				//var reg = /^我爱[\u4e00-\u9fa5]?人{6}$/;
+				//var reg1 = /^[a-z0-9]{6,}$/i
+				//var re = /.0.{5}/
+				//var re = /^(中华|国人)$/;
+				//var re = /^\d+$/; 
+				//var re = /^\D+$/;
+				//var re = /^\w+$/;
+				//var re = /^\s+$/g;
+				//var re = /^\S+$/g;
+				//alert(re.test(str));
+				//alert(re.test("\n"));
+				/*
+				var pattern = /8(.*)8(.*)8/; //获取 8..8 之间的任意字符
+				var str = 'This is 88google8, dd 8ggg8';
+				var arr = pattern.exec(str);
+				for( var i = 0;i<arr.length;i++){
+					alert(arr[i]);
+				}
+				
+
+				var pattern = /8(.*)(.*)8/;
+				var str = 'This is 8google8';
+				var result = str.replace(pattern,'<strong>$2</strong>'); //得到替换的字符串输出
+				document.write(result);
+			
+				var pattern = /(.*)\s(.*)/;
+				var str = 'google baidu';
+				var result = str.replace(pattern, '$2 $1'); //将两个分组的值替换输出
+				document.write(result);	
+				
+				var pattern = /google\b/; //\b 可以匹配是否到了单词边界
+				var str = 'google';
+				var str2= 'googleaa googlexx google dsdddd';
+				alert(pattern.test(str2));
+				
+
+				var reg = /^a.*b$/m;
+				var str = "asfdslfb\nalsdfdsb";
+				alert(reg.test(str));*/
+
+				/*
+					案例：
+					var pattern = /(google){4,8}/; //匹配分组里的字符串 4-8 次
+					var str = 'googlegoogle';
+					alert(pattern.test(str));
+
+					var pattern = /8(.*)8/; //获取 8..8 之间的任意字符
+					var str = 'This is 8google8, dd 8ggg8';
+					alert(str.match(pattern));
+					alert($1); //得到第一个分组里的字符串内容
+
+					var pattern = /8(.*)8/;
+					var str = 'This is 8google8';
+					var result = str.replace(pattern,'<strong>$1</strong>'); //得到替换的字符串输出
+					document.write(result);
+
+					var pattern = /(.*)\s(.*)/;
+					var str = 'google baidu';
+					var result = str.replace(pattern, '$2 $1'); //将两个分组的值替换输出
+					document.write(result);
+
+					var pattern = /google|baidu|bing/; //匹配三种其中一种字符串
+					var str = 'google';
+					alert(pattern.test(str));
+
+					var pattern = /goo\sgle/; //\s 可以匹配到空格
+					var str = 'goo gle';
+					alert(pattern.test(str));
+
+					var pattern = /google\b/; //\b 可以匹配是否到了边界
+					var str = 'google';
+					var str2= 'googleaa googlexx google dsdddd';
+					alert(pattern.test(str));
+
+					var pattern = /g\w*gle/; //\w*匹配任意多个所有字母数字_
+					var str = 'google';
+					alert(pattern.test(str));
+
+					var pattern = /google\d*/; //\d*匹配任意多个数字
+					var str = 'google444';
+					alert(pattern.test(str));
+
+					var pattern = /\D{7,}/; //\D{7,}匹配至少 7 个非数字
+					var str = 'google8';
+					alert(pattern.test(str));
+
+					var pattern = /g[a-zA-Z_]*gle/; //[a-z]*表示任意个 a-z 中的字符
+					var str = 'google';
+					alert(pattern.test(str));
+
+					var pattern = /g[^0-9]*gle/; //[^0-9]*表示任意个非 0-9 的字符
+					var str = 'google';
+					alert(pattern.test(str));
+
+					var pattern = /[a-z][A-Z]+/; //[A-Z]+表示 A-Z 一次或多次
+					var str = 'gOOGLE';
+					alert(pattern.test(str));
+
+					var pattern = /g.*gle/; //.匹配 0 到多个
+					var str = 'google'; //*,?,+,{n,m}
+					alert(pattern.test(str));
+					
+					var pattern = /^[a-z]+\s[0-9]{4}$/i;
+					var str = 'google 2012';
+					alert(pattern.exec(str)); //返回整个字符串
+					 
+					var pattern = /^[a-z]+/i; //只匹配字母
+					var str = 'google 2012';
+					alert(pattern.exec(str)); //返回 google
+					
+					var pattern = /^([a-z]+)\s([0-9]{4})$/i; //使用分组
+					var str = 'google 2012';
+					alert(pattern.exec(str)[0]); //google 2012
+					alert(pattern.exec(str)[1]); //google
+					alert(pattern.exec(str)[2]); //2012
+
+					var pattern = /\.\[\/b\]/; //特殊字符，用\符号转义即可
+					var str = '.[/b]';
+					alert(pattern.test(str));
+					var pattern = /^\d+/mg; //启用了换行模式
+					var str = '1.baidu\n2.google\n3.bing';
+					var result = str.replace(pattern, '#');
+					alert(result);
+
+					检查邮政编码//共6位数字，第一位不能为0
+					u /^[1-9]\d{5}$/
+					n检查文件压缩包//xxx.zip\xxx.gz\xxx.rarv
+					u /^\w+\.(zip|gz|rar)$/
+					n 删除多余空格  //
+					u str.replace(/\s+/,'');
+					n 删除首尾空格
+					u str.replace(/^\s+/,'');
+					u str.replace(/\s+$/,'');
+					n电子邮件(xxxxx@xxxx(.xxxx)+)
+					u /^\w+@\w+(\.\w+)+$/
+					n 手机号
+					u /^[1-3]\d{10}$/
+					n 身份证
+					u /^\d{17}(\d|X)$/
+					n日期(xxxx-xx-xx|xxxx/xx/xx|xxxx.xx.xx)
+					u/^\d{2}|\d{4}[-\/\.]\d{2}[-\/\.]\d{2}$/  //[acbd]表示a,b,c,d中有且仅有一个出现;
+					n 只能输入中文
+					ustr.replace(/[^\u4e00-\u9fa5]/g,'');
+					n账户名只能使用数字字母下划线，且数字不能开头，长度在6-15之间
+					u /^[a-zA-Z_]\w{5,14}$/
+					n 验证IP
+					u (xxx.)xxx.xxx.xxx|  
+					u 254.245.255.255
+					u 240.196.19.5
+					u/^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/
+					n将所有的bag、beg、big和bog改为bug
+					ustr.replace(/(bag|beg|big|bog)/g,'bug');
+					n将所有方法foo(a,b,c)的实例改为foo(b,a,c)
+					ustr.replace(/foo\(([^,]+),([^,]+),([^,]+)\)/g,'foo($2,$1,$3)');
+									*/
+								
+								reg = /^(?![^a-zA-Z]+$)(?!\D+$).{6,20}$/ //6到20位必须有字母和数字
+
+					/^([\u4e00-\u9fa5]+|[a-zA-Z0-9_]+)+$/  //字符中只能包含中英文、数字和下划线！
+			};
+		};
+		</script>
+    </head>
+    <body>
+    <input type="text" id="text1"/><input type="button" value="提交" id = "btn"/>
+    </body>
+</html>

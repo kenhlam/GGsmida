@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <!--[if gt IE 9]>
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <![endif]-->
+    <!--[if IE 7]> 
+    <meta http-equiv="X-UA-Compatible" content="IE=9" /> 
+    <![endif]--> 
+    <!--[if IE 8]> 
+    <meta http-equiv="X-UA-Compatible" content="IE=9" /> 
+    <![endif]--> 
+    <!--[if IE 9]> 
+    <meta http-equiv="X-UA-Compatible" content="IE=9" /> 
+    <![endif]--> 
+    <!-- 注意gte与gt区别 -->
+    
+    <!--[if lte IE 7]>
+    <style type="text/css">
+        .unsupporttip
+        {
+            margin-top:-40px;
+            width:100%;
+            margin-left:auto;
+            margin-right:auto;
+            display:block;
+            height:40px;
+            background-color:#f9ecc3;
+            color:red;
+            line-height: 40px;
+            text-align: center;
+            position:fixed;
+	        _position: absolute;  
+	        _clear: both;   
+	        _top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop   
+                       +(documentElement.clientHeight-this.clientHeight) - 1   
+               : document.body.scrollTop   
+               +(document.body.clientHeight-this.clientHeight) - 1);
+        }
+        body{
+            margin-top:40px;
+        }
+    </style>
+    <div class="unsupporttip">您正在使用IE7内核或IE7内核以下浏览器，本系统不支持IE7级以下，请更新您的浏览器版本或调整兼容模式。</div>
+<![endif]--> 
+    
+</body>
+</html>
+<script type="text/javascript">
+	var ua = navigator.userAgent.toLowerCase();
+	var is_ios=navigator.userAgent.match(/(iPhone|iPod|iPad);?/i);
+	var is_android=navigator.userAgent.match(/android/i);
+	var is_wexin=navigator.userAgent.match(/MicroMessenger/i);
+	//判断移动端
+	function checkmoble()
+	{
+
+	    var userAgentInfo = navigator.userAgent;
+	    var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+	    var flag = false;
+	    for (var v = 0; v < Agents.length; v++) {
+	        if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = true; break; }
+	    }
+	    return flag;
+	}
+
+    {//限制作用域
+        var msg1 = 'var msg'
+        let msg = 'letmsg'
+        function at(){
+            
+            alert(msg)
+        }
+    }
+    function ()  
+   
+</script>

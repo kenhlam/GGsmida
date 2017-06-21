@@ -1,0 +1,26 @@
+你不再需要检查元素，然后编辑HTML文件。现在，你只需要打开开发者控制台，然后输入下列命令：
+
+document.body.contentEditable=true
+
+这个命令会让内容编程可以编辑的形式。之后你就可以在DOM中进行编辑了。
+
+3.在DOM中寻找与某个元素相关联的Event
+
+在调试的时候，你一定想要在DOM中找到与某个元素相关联的event。使用开发者控制台，你可以更轻松的完成这个目标。
+
+getEventListeners($(‘selector’))会发挥一个对象字符串，里面包含着与那个元素有关的所有event。你可以展开对象，查看这些event：
+
+ 
+
+要想找到某个特定event的Listener，你可以使用下面这个命令：
+
+getEventListeners($(‘selector’)).eventName[0].listener
+
+
+ctrl shift f
+click breakpoint
+console.count
+console.dir(obj)相当于断点查看效果 
+console.time 计时开始
+
+console.timeEnd

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function convertAnswerResultList(answerResultList) {
+   	    	if (answerResultList == null || answerResultList.length == 0) {
+   	    	    return answerResultList;
+   	    	}
+   	    	var result = [];
+   	    	var matrixDict = {};
+   	    	for (var vI = 0; vI < answerResultList.length; vI++) {
+   	    	    var item = answerResultList[vI];
+   	    	    if (item.SubjectType == 3) {
+   	    	        var idArr = [item.SubjectGUID, item.IsEvaluationTeacher, item.EvaluationTeacherCode, item.EvaluationSubtype];
+   	    	        //rowId(按行分组)分组条件 ，做为题目字典的一个属性可能通过matrixDict[rowId]查看是否存在  
+   	    	        var rowId = idArr.join("_"); 
+   	    	       //var subjectItems = null;
+   	    	        if (item.EvaluationSubtype == 1 || item.EvaluationSubtype == 2) {
+   	    	        	//不存在则创建
+   	    	            //subjectItems = matrixDict[rowId];
+   	    	            if (matrixDict[rowId] == null) {
+   	    	                matrixDict[rowId] = {
+   	    	                    Items: [], SubjectGUID: item.SubjectGUID, IsEvaluationTeacher: item.IsEvaluationTeacher,
+   	    	                    EvaluationTeacherCode: item.EvaluationTeacherCode, EvaluationSubtype: item.EvaluationSubtype,
+   	    	                    QNo: item.QNo, SubjectTitle: item.SubjectTitle, SubjectType: item.SubjectType
+   	    	                };
+   	    	                //创建,Items存放分组数据
+   	    	                //matrixDict[rowId] = subjectItems;
+   	    	            }
+   	    	        }else {
+   	    	            throw "not supported exception:" + item.EvaluationSubtype;
+   	    	        }
+   	    	        //满足当前条件的放入对应的分组
+   	    	        matrixDict[rowId].Items.push(item);
+   	    	    }
+   	    	    else {
+   	    	        result.push(item);
+   	    	    }
+   	    	}
+   	    	//matrixDict 里存放的分组后的数据,以条件为属性名，值为分组后的数据
+   	    	for (var item in matrixDict) {
+   	    	    var matrixObj = matrixDict[item];
+   	    	    if (matrixObj.SubjectType == 3 && matrixObj.EvaluationSubtype == 2) {
+   	    	        var rows = {};
+   	    	        var cols = {};
+   	    	        var datas = {};
+   	    	        for (var tI = 0; tI < matrixObj.Items.length; tI++) {
+   	    	            var subItem = matrixObj.Items[tI];
+   	    	            //rows 存放行id
+   	    	            rows[subItem.SubjectItemGUID] = subItem.SubjectItemTitle;
+   	    	            cols[subItem.SubjectItemOptionGUID] = subItem.SubjectItemOptionTitle;
+   	    	            var rowObj = datas[subItem.SubjectItemGUID];
+   	    	            if (rowObj == null) {
+   	    	                rowObj = {};
+   	    	                datas[subItem.SubjectItemGUID] = rowObj;
+   	    	            }
+   	    	            rowObj[subItem.SubjectItemOptionGUID] = subItem;
+   	    	        }
+   	    	        var rowArr = [];
+   	    	        for (var rowId in rows) {
+   	    	            rowArr.push({ id: rowId, title: rows[rowId] });
+   	    	        }
+   	    	        var colArr = [];
+   	    	        for (var colId in cols) {
+   	    	            colArr.push({ id: colId, title: cols[colId] });
+   	    	        }
+   	    	        matrixObj.rows = rowArr;
+   	    	        matrixObj.cols = colArr;
+   	    	        matrixObj.datas = datas
+   	    	    };
+   	    	    result.push(matrixObj);
+   	    	}
+   	    	return result;
+   	 	}	
+
+
+
+
+   	 	var arr = [{"QNo":1,"QuestionnaireGUID":"597cfeec-b97d-4fc0-9417-cac695115453","SubjectGUID":"95e14ee9-0485-11e7-a441-842b2b64399a","SubjectTitle":"矩阵单选题","SubjectType":3,"SubjectScore":5,"SubjectItemGUID":"15ffa657-7a42-4eba-8dbb-517c40712c8a","SubjectItemTitle":"矩阵行1","SubjectItemOptionGUID":"c84261e7-4421-467d-a956-7e518a91d808","SubjectItemOptionTitle":"选项1","ResultPercent":100,"ResultScore":2,"IsEvaluationTeacher":true,"EvaluationTeacherCode":"1106181225","EvaluationTeacherName":"贾金柱","EvaluationSubtype":2},{"QNo":1,"QuestionnaireGUID":"597cfeec-b97d-4fc0-9417-cac695115453","SubjectGUID":"95e14ee9-0485-11e7-a441-842b2b64399a","SubjectTitle":"矩阵单选题","SubjectType":3,"SubjectScore":5,"SubjectItemGUID":"15ffa657-7a42-4eba-8dbb-517c40712c8a","SubjectItemTitle":"矩阵行1","SubjectItemOptionGUID":"fbebc32e-f19c-424b-bdf0-4babb287f6cc","SubjectItemOptionTitle":"选项2","ResultPercent":80,"ResultScore":3,"IsEvaluationTeacher":true,"EvaluationTeacherCode":"1106181225","EvaluationTeacherName":"贾金柱","EvaluationSubtype":2},{"QNo":1,"QuestionnaireGUID":"597cfeec-b97d-4fc0-9417-cac695115453","SubjectGUID":"95e14ee9-0485-11e7-a441-842b2b64399a","SubjectTitle":"矩阵单选题","SubjectType":3,"SubjectScore":5,"SubjectItemGUID":"c36b66d7-65be-4f36-9039-79c7d633dbbd","SubjectItemTitle":"矩阵行2","SubjectItemOptionGUID":"c84261e7-4421-467d-a956-7e518a91d808","SubjectItemOptionTitle":"选项1","ResultPercent":100,"ResultScore":4,"IsEvaluationTeacher":true,"EvaluationTeacherCode":"1106181225","EvaluationTeacherName":"贾金柱","EvaluationSubtype":2},{"QNo":1,"QuestionnaireGUID":"597cfeec-b97d-4fc0-9417-cac695115453","SubjectGUID":"95e14ee9-0485-11e7-a441-842b2b64399a","SubjectTitle":"矩阵单选题","SubjectType":3,"SubjectScore":5,"SubjectItemGUID":"c36b66d7-65be-4f36-9039-79c7d633dbbd","SubjectItemTitle":"矩阵行2","SubjectItemOptionGUID":"fbebc32e-f19c-424b-bdf0-4babb287f6cc","SubjectItemOptionTitle":"选项2","ResultPercent":80,"ResultScore":5,"IsEvaluationTeacher":true,"EvaluationTeacherCode":"1106181225","EvaluationTeacherName":"贾金柱","EvaluationSubtype":2},{"QNo":2,"QuestionnaireGUID":"597cfeec-b97d-4fc0-9417-cac695115453","SubjectGUID":"95e14ad4-0485-11e7-a441-842b2b64399a","SubjectTitle":"矩阵单选题","SubjectType":3,"SubjectScore":5,"SubjectItemGUID":"e4f6a294-6afb-42f9-8e1f-7bdca06c4cde","SubjectItemOptionGUID":"3f389a94-9a7d-45c5-9797-a5cbf5266308","ResultPercent":100,"ResultScore":0,"IsEvaluationTeacher":true,"EvaluationTeacherCode":"1106181225","EvaluationTeacherName":"贾金柱","EvaluationSubtype":1,"optionIdx":1},{"QNo":2,"QuestionnaireGUID":"597cfeec-b97d-4fc0-9417-cac695115453","SubjectGUID":"95e14ad4-0485-11e7-a441-842b2b64399a","SubjectTitle":"矩阵单选题","SubjectType":3,"SubjectScore":5,"SubjectItemGUID":"926d4dac-bd57-48b5-845b-601e107a9c42","SubjectItemOptionGUID":"91b7e2e6-6a8b-4282-8862-ee648c504e6f","ResultPercent":80,"ResultScore":0,"IsEvaluationTeacher":true,"EvaluationTeacherCode":"1106181225","EvaluationTeacherName":"贾金柱","EvaluationSubtype":1,"optionIdx":1}]	;
+
+
+
+
+   	 	console.log(convertAnswerResultList(arr))
+	</script>
+</body>
+</html>

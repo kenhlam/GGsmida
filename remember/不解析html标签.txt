@@ -1,0 +1,1 @@
+var value = _this.value.replace(/</g, '&lt;').replace(/>/g, '&gt;'); //²»½âÎöhtml±êÇ©  

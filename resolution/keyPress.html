@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		 //将回车按钮转换为搜索按钮
+            $("#searchtext").keyup(function (e) {
+                var ev = window.event || e;
+                if (ev.keyCode == 13) {
+                    $('#serchok').click();
+                }
+            });
+	</script>
+</body>
+</html>

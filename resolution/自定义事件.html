@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery-1.8.0.js"></script>
+	<script type="text/javascript" src="tools.js"></script>
+</head>
+<body>
+	<div id="cnm">123</div>
+	<button id="option">trigger</button>
+	<div class="app">append</div>
+	<script type="text/javascript">
+		var $self = $("#cnm")
+		$self.on('action',function(){
+			alert(1)
+		}).trigger('action');
+		$("#option").on('click',function(){
+			$self.trigger('action')
+		})
+		$(".app").append($("<div>我是荣家</div>").data("data","{name:1}"))
+
+
+		var str = {"projectName":"","modelName":"asda","cubeName":"asda","cubeId":"","cubeType":"normal","dataSourceId":"1315326551","bizTypeId":"4241392668","dbName":"","schemaName":"public","previewRows":"10","factTable":{"table":"insight_aggregation_groups","alias":"insight_aggregation_groups","coordinate":"0,0"},"lookups":[{"factTable":"insight_aggregation_groups","factTableAlias":"insight_aggregation_groups","factSql":"","factIsCreatedBySql":"","factCoordinate":"554,91","factSchema":"public","lookUpTable":"","lookUpAlias":"","lookUpIsCreatedBySql":"","lookUpSql":"","lookUpCoordinate":"","lookUpSchema":"","joinPointArray":["public-insight_aggregation_groups",""],"join":{"type":"","primary_key":[],"foreign_key":[]}}],"filter_condition":"{\"relation\":\"AND\",\"childs\":[{\"operator\":\"GT\",\"columnId\":\"\\\"public\\\".\\\"insight_aggregation_groups\\\".\\\"cube_id\\\"\",\"filterConditionWhere\":\"\\\"public\\\".\\\"insight_aggregation_groups\\\".\\\"cube_id\\\"\",\"values\":[\"510332d594bc4b1a859226e619824b70\"]}]}","filterConditionExpression":"\"public\".\"insight_aggregation_groups\".\"cube_id\",cube_id, > ,'510332d594bc4b1a859226e619824b70',与,1,(,),","measures":[],"dimensions":[{"sourceTablePrefix":"public","dataType":"varchar(64)","position":"0","visible":1,"name":"id","table":"insight_aggregation_groups","derived":null,"column":"id"},{"sourceTablePrefix":"public","dataType":"varchar(64)","position":"1","visible":1,"name":"cube_id","table":"insight_aggregation_groups","derived":null,"column":"cube_id"},{"sourceTablePrefix":"public","dataType":"varchar(64)","position":"2","visible":1,"name":"includes","table":"insight_aggregation_groups","derived":null,"column":"includes"},{"sourceTablePrefix":"public","dataType":"varchar(512)","position":"3","visible":1,"name":"mandatory_dimensions","table":"insight_aggregation_groups","derived":null,"column":"mandatory_dimensions"},{"sourceTablePrefix":"public","dataType":"varchar(512)","position":"4","visible":1,"name":"hierarchy_dimensions","table":"insight_aggregation_groups","derived":null,"column":"hierarchy_dimensions"},{"sourceTablePrefix":"public","dataType":"varchar(512)","position":"5","visible":1,"name":"joint_dimensions","table":"insight_aggregation_groups","derived":null,"column":"joint_dimensions"}],"metrics":[],"aggregation_groups":[{"includes":[],"select_rule":{"hierarchy_dims":[],"mandatory_dims":[],"joint_dims":[]}}],"rowkey":{"rowkey_columns":[]},"partition_desc":{"partition_date_column":null,"partition_date_start":null,"partition_date_format":"yyyy-MM-dd","partition_type":"APPEND","partitionTimeFormat":"HH:mm:ss","partition_time_column":null},"auto_merge_time_ranges":[604800000,2419200000],"retention_range":"0","partition_date_start":0,"hbase_mapping":{"column_family":[{"name":"f1","columns":[{"qualifier":"m","measure_refs":["_COUNT_","度量聚合"]}]}]}}
+	</script>
+</body>
+</html>

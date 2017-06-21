@@ -1,0 +1,10 @@
+npm uninstall -g angular-cli
+ng new PROJECT_NAME
+cd PROJECT_NAME
+npm install 
+ng serve
+
+
+
+
+https://segmentfault.com/a/1190000007176295?from=timeline&isappinstalled=1

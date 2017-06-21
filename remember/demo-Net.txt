@@ -1,0 +1,7 @@
+http://www.cnblogs.com/humin/p/4556820.html  很好的一个和框架种js  prototype方面东西
+http://www.tuicool.com/articles/6jqmeef      chorm控制台
+http://www.cnblogs.com/darrenji/             react入门demo视频
+https://zhuanlan.zhihu.com/p/21312474        方案管理思路
+http://www.zuidaima.com/blog/2821496154983424.htm     react+weui
+http://www.cnblogs.com/wangfupeng198         js闭包
+http://www.cnblogs.com/darrenji/p/5505499.html    react
