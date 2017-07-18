@@ -1,0 +1,11 @@
+{
+  "name": "laypage",
+  "version": "1.3.0",
+  "description": "layPage是一款非常灵活的分页组件，使用简单得掉渣，但是却需要遵循一定的路由规则，比如：/page/:num，也就是说，它并不支持参数的分页形式，而是采用目录的分页结构。 它提供了数量可观的可选参数，可方便于您对分页样式和风格的定义。官网：[http://www.layui.com](http://www.layui.com)",
+  "main": "./laypage/laypage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

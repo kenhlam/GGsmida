@@ -1,0 +1,36 @@
+{
+  "name": "laydate",
+  "version": "1.0.7",
+  "description": "package version for laydate ",
+  "main": "laydate/laydate.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sentsin/laydate.git"
+  },
+  "keywords": [
+    "layui",
+    "laydate",
+    "datepicker",
+    "date",
+    "time",
+    "timepicker"
+  ],
+  "author": "liuhan@xbniao.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sentsin/laydate/issues"
+  },
+  "homepage": "https://github.com/sentsin/laydate#readme",
+  "devDependencies": {
+    "webpack": "^2.2.1",
+    "css-loader": "^0.26.1",
+    "file-loader": "^0.10.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7"
+  },
+  "_from": "laydate@1.0.7",
+  "_resolved": "http://registry.npm.taobao.org/laydate/download/laydate-1.0.7.tgz"
+}

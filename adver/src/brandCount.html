@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>品牌统计</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    </head>
+    <body>    
+        <div class="content">
+            <div class="top-line"></div>
+            <div class="main">
+                <div class="right">
+                    <dl>
+                        <dt>时间力度：</dt>
+                        <dd>
+                            <select id="time">
+                                <option value="0">年</option>
+                                <option value="1">半年</option>
+                                <option value="2">季度</option>
+                                <option value="3">月</option>
+                            </select>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>发布日期：</dt>
+                        <dd>
+                            <select id="area">
+                                
+                            </select>
+                        </dd>
+                    </dl>
+                    <!-- <dl>
+                        <dt>区县：</dt>
+                        <dd>
+                            <select id="area">
+                                <option value="0">请选择</option>
+                            </select>
+                        </dd>
+                    </dl> -->
+                    <dl>
+                        <dt>媒体类型：</dt>
+                        <dd id="mediaType">
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>违法情况：</dt>
+                        <dd id="law">
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>监管单位：</dt>
+                        <dd>
+                            <ul id="treeJgdw" class="ztree"></ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>监测单位：</dt>
+                        <dd>
+                            <ul id="treeJcdw" class="ztree"></ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>广告类别：</dt>
+                        <dd>
+                            <ul id="treeAdver" class="ztree"></ul>
+                        </dd>
+                    </dl>
+                    <button type="button" class="query" id="query">查询</button>
+                </div>
+                <div class="left">
+                    <div class="search">
+                        <span>搜索：</span>
+                        <input type="text" id="keyword">
+                    </div>
+                    <img id="loading" src="./images/loading.gif">
+                    <p id="msg">暂无数据</p>
+                    <div class="data" id="data"></div>                    
+                    <div id="page"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

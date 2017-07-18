@@ -1,0 +1,164 @@
+body {
+    margin: 0;
+    min-width: 1200px;
+    background: #d7e3cb;
+    font: 12px "microsoft yahei";
+}
+
+.content {
+    padding: 0 20px;
+    margin: 30px 0 60px;
+}
+
+.top-line {
+    height: 0;
+    border-top: 2px solid #008844;
+}
+
+.main {
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.main .left {
+    position: relative;
+    margin-right: 280px;
+}
+.main .left .data{
+    overflow: auto;
+}
+#msg{    
+    margin: 0;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%); 
+    display: none;
+}
+
+#loading{    
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    display: none;
+}
+
+.main .left .search {
+    height: 32px;
+    overflow: hidden;
+    background: #39a689;
+}
+
+.main .search span {
+    float: left;
+    color: white;
+    margin-left: 10px;
+    line-height: 32px;
+}
+
+.main .search input {
+    float: left;
+    width: 137px;
+    height: 20px;
+    margin-top: 4px;
+    padding: 0 3px;
+    border: 1px solid #c6c6c6;
+    border-radius: 5px;
+    background: white;
+}
+
+.tab {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.tab tbody tr:nth-child(odd) {
+    background: white;
+}
+
+.tab tbody tr:nth-child(even) {
+    background: #fffce0;
+}
+
+.tab th {
+    font-weight: normal;
+    background: #addf80;
+}
+
+.tab th,
+.tab td {
+    height: 30px;
+    white-space: nowrap;
+    border: 1px solid #ddd;
+}
+
+.main .right {
+    width: 260px;
+    float: right;
+}
+
+.right dl {
+    margin: 0 0 20px 0;
+    overflow: hidden;
+}
+
+.right dt {
+    font-size: 14px;
+}
+
+.right dd {
+    margin: 6px 0 0;
+}
+
+.right dd .date{
+    width: 93px;
+    height: 28px;
+    padding: 0 3px;
+    background: #f0f6ea;
+    border: 1px solid #c6c6bc;
+}
+.right dd select{
+    width: 214px;
+    height: 30px;
+    background: #f0f6ea;
+    border: 1px solid #c6c6bc;
+}
+
+.right .ztree {
+    width: 197px;
+    padding: 15px 0 15px 15px;
+    background: #f0f6ea;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.right .query{
+    width: 170px;
+    height: 35px;
+    cursor: pointer;
+    margin: 0px 0 45px 24px;
+    background: #5f7fcd;
+    border: 1px solid #c6c6bc;
+}
+.selectedVals{
+    width:31%;
+    float: left;
+    line-height: 20px;
+    height: 20px;
+}
+.selectedVals span{
+    display: inline-block;
+    margin: 0 5px;
+    line-height: 20px;
+    height: 20px;
+    position: relative;
+    top:-6px;
+}
+.selectedVals input{
+    line-height: 20px;
+    height: 20px;
+};
+

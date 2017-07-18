@@ -1,0 +1,5 @@
+git clone url
+cnpm init
+npm run dev
+npm run build 
+distÏÂ  http_server -p -3000
