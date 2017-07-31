@@ -1,0 +1,672 @@
+<form class="form-horizontal form-container" id="formContainerSize" style="width: 800px">
+   <div class="left">
+        <div class="calName">
+            <div class="preName">名称：</div>
+            <input type="text">
+        </div>
+        <div class="list">
+            <div class="preName">表达式：</div>
+            <div class="selectDiv">
+                <span class="toggleList">插入维度<i></i></span>
+                <ul class="selectList" id="js_insertDimension">
+                </ul>
+            </div>
+            <div class="selectDiv">
+                <span class="toggleList">插入度量<i></i></span>
+                <ul class="selectList" id="js_insertMeasure">
+                </ul>
+            </div>
+            <div class="selectDiv">
+                <span class="toggleList">插入参数<i></i></span>
+                <ul class="selectList">
+                    <li>插入参数1</li>
+                    <li>插入参数2</li>
+                    <li>插入参数3</li>
+                    <li>插入参数4</li>
+                </ul>
+            </div>
+        </div>
+        <div class="exp">
+            <div class="preName"></div>
+            <div id="contWrap">
+                <textarea name="" id="editArea" cols="30" rows="10" spellcheck="false"></textarea>
+                <div id="showArea"></div>
+            </div>
+        </div>
+        <div class="type">
+            <div class="preName">类型：</div>
+            <div class="selectDiv notInsert">
+                <span class="toggleList"><span>维度</span><i></i></span>
+                <ul class="selectList" style="border:1px solid #ccc;display: none;">
+                    <li style="height:25px;line-height:25px;padding-left: 10px;">度量</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        <div class="formula">
+            <div class="searchWrap">
+                <input type="text" placeholder="请输入关键字">
+                <i></i>
+            </div>
+            <ul id="formulaList">
+            </ul>
+        </div>
+        <div class="formulaExp">
+            <p class="title">SUM(表达式)</p>
+            <p class="details">返回表达式中所有值的总和。SUM只能用于数字字段</p>
+            <p class="exp"><b>示例：</b><span>SUM([销售额])</span></p>
+        </div>
+    </div>
+</form>
+<script>
+    var calculationObj = require("calculation");
+    console.log(calculationObj)
+    var $form = $("#formContainerSize");
+    var calculation = {
+        init:function(){
+            var that = this;
+            that.htmlInit();
+            // 初始化colunms
+            that.selectListInit();
+            that.renderEdit();
+        },
+        htmlInit:function(){
+            var that = this
+            // 编辑
+            // try{
+            //     if($("#formContainer").getPageData().haha == "edit"){
+            //         var showBackText = [];
+            //         var formulaArr = $(".search-fitter", $tagertR).find("li.create-size").data().sizeData().look;
+            //         $.each(formulaArr,function(index, el) {
+            //             this.
+            //         });
+            //         that.insertText(document.getElementById("editArea"),showBackText);
+            //     }
+            // }catch(e){}
+            
+            var that = this;
+            //表达式行的点击下拉样式操作
+            $(".toggleList",$form).on("click",function(){
+                var $showSelect = $(this).parents(".selectDiv").find(".selectList")
+                $showSelect.toggle();
+                if(!$showSelect.is(":hidden")){
+                    $showSelect.parents(".selectDiv").siblings().find(".selectList").hide()
+                }
+                if($(this).parents(".selectDiv").hasClass('notInsert')){
+                    var showText = $(".notInsert .toggleList").text();
+                    if(showText == "维度"){
+                        $(".notInsert li").text("度量")
+                    }else{
+                        $(".notInsert li").text("维度")
+                    }
+                }
+                //隐藏下拉
+                that.hideSelected($(this).siblings(".selectList"))
+            });
+
+
+            // 失焦验证
+            $("#editArea").off("blur").on("blur",function(){
+                var normalValidateResult = calculationObj.checkJsgs($form);
+                console.log(normalValidateResult.state)
+                console.log(normalValidateResult.msg)
+                var deepValidataResult = calculationObj.validator($(".calName input",$form).val(),$("#editArea",$form).val());
+                console.log(deepValidataResult)
+            })
+            
+
+            // textarea滚动时同步 showDiv滚动
+            $("#editArea").off("scroll").on("scroll",function(){
+                $("#showArea").scrollLeft($("#editArea").scrollLeft())
+                $("#showArea").scrollTop($("#editArea").scrollTop())
+            })
+            //下拉点击操作 插入
+            $form .off("click",".selectDiv .selectList li").on("click",".selectDiv .selectList li",function(){
+                if($(this).parents(".selectDiv").hasClass('notInsert')){
+                    var thisText = $(this).text()
+                    $(this).parents(".notInsert").find(".toggleList span").text(thisText);
+                    $(this).parents(".selectList").hide();
+                    return
+                }
+                var insertStr = "[" + $(this).text() +"]";
+                $(this).parents(".selectList").hide();
+                that.insertText(document.getElementById("editArea"),insertStr);
+            });
+            //公式formulaList li点击事件  
+            var listObjArr = [
+                {
+                    name:"求和聚合",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"SUM([表达式])",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段",
+                        exp:"SUM([销售额])"
+                    }//表达式明说
+                },{
+                    name:"平均聚合",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)1",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段1",
+                        exp:"SUM([销售额])1"
+                    }//表达式明说
+                },{
+                    name:"计数聚合",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)2",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段2",
+                        exp:"SUM([销售额])2"
+                    }//表达式明说
+                },{
+                    name:"去重计数聚合",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)3",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段3",
+                        exp:"SUM([销售额])3"
+                    }//表达式明说
+                },{
+                    name:"最大值聚合",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)4",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段4",
+                        exp:"SUM([销售额])4"
+                    }//表达式明说
+                },{
+                    name:"最小值聚合",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)5",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段5",
+                        exp:"SUM([销售额])5"
+                    }//表达式明说
+                },{
+                    name:"加法",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)6",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段6",
+                        exp:"SUM([销售额])6"
+                    }//表达式明说
+                },{
+                    name:"减法",//显示名字
+                    realName:"",//参数名字
+                    inputType:"",//输入数据类型
+                    outputType:"",//计算结果类型
+                    insertStr:"",//插入写字板文字
+                    showExpress:{
+                        title:"SUM(表达式)7",
+                        details:"返回表达式中所有值的总和。SUM只能用于数字字段7",
+                        exp:"SUM([销售额])7"
+                    }//表达式明说
+                }
+            ];//listObjArr  end
+            $.each(listObjArr,function(idx,val){
+                $("<li>" + val.name + "</li>").data("furmulaItemData",val).appendTo('#formulaList');
+            });
+            //绑定公式双击事件
+            $("#formulaList",$form).on("dblclick","li",function(){
+                var furmulaItemData = $(this).data("furmulaItemData");
+                that.insertText(document.getElementById("editArea"),furmulaItemData.insertStr);
+            })
+            //绑定公式单击事件
+            $("#formulaList",$form).on("click","li",function(){
+                var furmulaItemData = $(this).data("furmulaItemData");
+                $(".formulaExp .title",$form).text(furmulaItemData.showExpress.title);
+                $(".formulaExp .details",$form).text(furmulaItemData.showExpress.details);
+                $(".formulaExp .exp span",$form).text(furmulaItemData.showExpress.exp);
+            })
+            //绑定公式搜索事件
+            $(".formula .searchWrap input").off("keyup").on("keyup",function(){
+                var searchVal = $(this).val().trim();
+                $("#formulaList",$form).find("li").each(function(){
+                    if($(this).text().indexOf(searchVal) == -1){
+                        $(this).hide()
+                    }else{
+                        $(this).show()
+                    }
+                })
+            })
+            $("#formulaList",$form).mCustomScrollbar({
+                theme:"dark",
+                axis: "y",
+                //advanced:{ updateOnContentResize: true }
+            });
+         },
+        selectListInit:function(){
+            var data =  $tagertR.data().dimensions ? $tagertR.data().dimensions().columns : [];
+            var li = "",showName;
+            $.each(data,function(idx,val){
+                showName = val.name ? val.name : val.columnName;
+                if(val.type == "dimension"){
+                    $("<li title='" + showName + "'>" + showName + "</li>").data("colInfo",val).appendTo('#js_insertMeasure')
+                }else if(val.type == "measure"){
+                    $("<li title='" + showName + "'>" + showName + "</li>").data("colInfo",val).appendTo('#js_insertDimension')
+                }
+            });
+            $("#js_insertMeasure",$form).mCustomScrollbar({
+                theme:"dark",
+                axis: "y",
+                //advanced:{ updateOnContentResize: true }
+            });
+            $("#js_insertDimension",$form).mCustomScrollbar({
+                theme:"dark",
+                axis: "y",
+                //advanced:{ updateOnContentResize: true }
+            });
+        },
+        renderEdit:function(){
+            var a = "";
+            var that = this;
+            $("#editArea").on("keyup",function(e){
+                debugger
+                a = $("#editArea").val().replace(/\n/g, "~/~</br>~/~").replace(/ /g,"~/~&nbsp~/~").split("~/~"); //, 获取值并分割成数组
+                var htmlData = that.changeToHTMLData(a);
+                that.createJspzHtml(htmlData,"showArea");
+            })
+        },
+        changeToHTMLData:function(textareaVal){//数组去空，返回渲染数据
+            var result = [];
+            var itemArr = [];
+            var html = "";
+            var resultObj = {};//结果数据
+            result = $.map(textareaVal,function(val,idx){//去空
+                return val ? val : null;
+            })
+            //根据输入内容生成数据 正则判断类型
+            // num nbsp br  defuaut:str  扩展公式类型 
+            //类型可以设置样式class
+            $.each(result,function(idx,val){
+                // 关键字
+                debugger
+                var keyWords = ["if","else","case","when","and","or","then",","]
+                switch(true)
+                {
+                    case /^[0-9]+$/.test(val):
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"num",
+                            "domStr":"<span class='num'>" + val + "</span>",
+                        })
+                        html += "<span class='num'>" + val + "</span>";
+                        break
+                    case val == '&nbsp':
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"nbsp",
+                            "domStr":"<span class='nbsp notFetch'>" + val + "</span>"
+                        })
+                        html += "<span class='nbsp notFetch'>" + val + "</span>";
+                        break
+                    case val == '</br>':
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"br",
+                            "domStr":"<span class='br'>" + val + "</span>"
+                        })
+                        html += "<span class='br notFetch'>" + val + "</span>";
+                        break
+                    case val == 'SUM([表达式])':
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"br",
+                            "domStr":"<span class='sum'>" + val + "</span>"
+                        })
+                        html += "<span class='sum'>" + val + "</span>";
+                        break
+                    case /^[\+\-\*\/><=\(\)]$/.test(val)://+ - * / > < =
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"ysf",
+                            "domStr":"<span class='ysf'>" + val + "</span>"
+                        })
+                        html += "<span class='ysf'>" + val + "</span>";
+                        break
+                    case /^\[.+\]$/.test(val):
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"col",
+                            "domStr":"<span class='col'>" + val + "</span>"
+                        })
+                        html += "<span class='col'>" + val + "</span>";
+                        break
+                    case keyWords.indexOf(val.toLowerCase()) != -1:
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords'>" + val + "</span>";
+                        break  
+                    case /^'[^'"]+'$/.test(val) :
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"str",
+                            "domStr":"<span class='str'>" + val + "</span>"
+                        })
+                        html += "<span class='str'>" + val + "</span>";
+                        break              
+                    default:
+                        // 默认为illegal str类型   str类型是为了 在验证时取出来判断是否有'' 加的
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"illegal str",
+                            "domStr":"<span class='illegal str'>" + val + "</span>"
+                        })
+                        html += "<span class='illegal str'>" + val + "</span>";
+                }
+            })
+            resultObj = {
+                "html":html,
+                "itemArr":itemArr
+            }
+            return resultObj;
+        },
+        createJspzHtml:function(htmlObj,contentDomId){//htmlObj:changeToHTMLData返回结果数据 contentDomId: id
+            var html = htmlObj.html;
+            $("#" + contentDomId).html(html);
+            //同步滚动条
+            $("#showArea").scrollLeft($("#editArea").scrollLeft())
+            $("#showArea").scrollTop($("#editArea").scrollTop())
+        },
+        insertText:function(obj,str){//document.getElementById('text')  obj
+            var that = this;
+            str = " " + str + " "
+            if (document.selection) {
+                var sel = document.selection.createRange();
+                sel.text = str;
+            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
+                var startPos = obj.selectionStart,
+                    endPos = obj.selectionEnd,
+                    cursorPos = startPos,
+                    tmpStr = obj.value;
+                obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+                cursorPos += str.length;
+                obj.selectionStart = obj.selectionEnd = cursorPos;
+            } else {
+                obj.value += str;
+            }
+            //插入文字后更新模拟的showDiv
+            var a = $("#editArea").val().replace(/\n/g, "~/~</br>~/~").replace(/ /g,"~/~&nbsp~/~").split("~/~"); //, 获取值并分割成数组
+            var htmlData = that.changeToHTMLData(a);
+            that.createJspzHtml(htmlData,"showArea");
+        },
+        hideSelected:function(dom){
+            // var dom = $(this).siblings(".selectList")
+            $(document).unbind("click").bind("click", function (e) {
+                var target = $(e.target);
+                if (dom) {
+                    if (target.parents().hasClass("selectDiv")) {
+                    } else {
+                        dom.hide();
+                    }
+                }
+            });
+            //滑出隐藏
+            dom.on("mouseleave ", function (e) {
+                dom.hide();
+            });
+        }
+    }//calculation end
+    calculation.init();
+</script>
+<!-- <script type="text/javascript">
+var data1 = $("#formContainer").getPageData();
+var $form = $("#formContainerSize");
+var sizeCont = {
+    init: function() {
+        var that = this;
+        that.isUpdate();
+        that.createCol();
+        that.delCLick();
+        that.clickSymbol();
+        that.clickTerm();
+    },
+    // 判断是否是跟新 
+    isUpdate: function() {
+
+        var that = this;
+        if (data1.page == "update") {
+            $("[name=cubeId]", $form).remove();
+            /*      $form.append('<input  type="text" class="form-control" required  name="id"   style="display:none" value="'+data1.id+'">') */
+            $form.append('<input  type="text" class="form-control" required  name="id"   style="display:none" value="' + data1.cubeId + '">');
+
+            //  dac.request({
+            //   url:$$("/measureAndDimension/getCalculateMeasure.json"),
+            //   type:"POST",
+            //   data:{id:data1.id},
+            //   success:function(d){
+            //    if(d.data.returnCode=="20000"){
+            //       dac.buildFormValue($form,d.data.result);
+            //       $("#actualFormula",$form).val(d.data.result.extend5);
+            //       var actualFormula=d.data.result.extend5.split("#$#");
+            //       var span="";
+
+            //       for(var i=1;i<actualFormula.length;i++){
+            //         if(actualFormula[i].indexOf(".")>0){
+            //           span+='<span class="c-text" caption="'+actualFormula[i].split(".")[2]+'" table="'+actualFormula[i].split(".")[0]+'" ><span class="c-text1" columnName="'+actualFormula[i].split(".")[1]+'">'+actualFormula[i].split(".")[2]+'</span><span class="del">x</span></span>';
+            //         }else{
+            //           span+='<span class="c-text ysf"><span class="c-text1">'+actualFormula[i]+'</span><span class="del">x</span></span>';
+            //         }
+            //       }
+            //       $("#jsgs",$form).append(span);
+            //     }else{
+            //       dac.alert("请求失败!");    
+            //     }
+            //   }
+            // }); 
+
+            // 
+            // if(data1.cubeId!="" && !$("li.create-size",$tagertR).data().sizeData){
+            //   // 存储数据源ID
+            //   $("[name=cubeId]",$form).val(data1.cubeId);
+            //   dac.request({
+            //     url:$$("/measureAndDimension/getMeasure.json"),
+            //     type:"POST",
+            //     data:{
+            //       cubeId:data1.cubeId
+            //     },
+            //     success:function(d){
+            //       if(d.data.returnCode=="20000"){
+            //         dac.buildFormValue($form,d.data.result);
+            //         $("#actualFormula",$form).val(d.data.result.extend5);
+            //         that.updateInit(d.data.result);
+            //       }else{
+            //         dac.alert("请求失败!");    
+            //       }
+            //     }
+            //   });
+            // } else {
+            //   var lookDat = $("li.create-size",$tagertR).data().sizeData().look[0];
+            //   $("#actualFormula",$form).val(lookDat.formula);
+            //   $("input[name=caption]").val(lookDat.name);
+            //   that.updateInit(lookDat);
+            // }
+        }
+    },
+    updateInit: function(data) {
+        var actualFormula = data.formula.split("#$#");
+        var span = "";
+        for (var i = 1; i < actualFormula.length; i++) {
+            if (actualFormula[i].indexOf(".") >= 0) {
+                span += '<span class="c-text" caption="' + actualFormula[i].split(".")[2] + '" table="' + actualFormula[i].split(".")[0] + '" ><span class="c-text1" columnName="' + actualFormula[i].split(".")[1] + '">' + actualFormula[i].split(".")[2] + '</span><span class="del">x</span></span>';
+            } else {
+                span += '<span class="c-text ysf"><span class="c-text1">' + actualFormula[i] + '</span><span class="del">x</span></span>';
+            }
+        }
+        $("#jsgs", $form).append(span);
+    },
+    // 生成 主表列表名称 表格
+    createCol: function(data) {
+        // 
+        // dac.request({
+        //   url:$$("/measureAndDimension/getMeasure.json"),
+        //   type:"POST",
+        //   data:{
+        //     cubeId:data1.data.cubeId
+        //   },
+        //   success:function(d){
+        //     if(d.data.returnCode=="20000"){
+        //       data = d.data.result.measureDimensions; 
+        //     }else{
+        //       dac.alert("请求失败!");
+        //     }
+        //   }
+        // }); 
+        // var data = $("table.table-thead", $tagertR).data().dimensions ? $("table.table-thead", $tagertR).data().dimensions().columns : [];
+        var data =  $tagertR.data().dimensions ? $tagertR.data().dimensions().columns : [];
+        var tr = "";
+        for (var i = 0; i < data.length; i++) {
+            // $(".data-table", $tagert).attr("ename") == data[i].sourceTable
+            if (data[i].type == "measure" && data[i].measureType!=2) {
+                var columnName = data[i].name || data[i].name == "" ? data[i].name : data[i].columnName;
+                    if(data[i].sqlTable == true || $tagertL.data().getPageData().type =="4"){
+                       var sourceAlias = data[i].sourceTableAlias || data[i].sourceTable;
+                    }else{
+                       sourceAlias = data[i].sourceTable || data[i].sourceTableAlias;
+                    }
+                    var sourceTable = data[i].sourceTable ? data[i].sourceTable : "--";
+                tr += '<tr sourceTableAlias ="'+data[i].sourceTableAlias+'" sqlTable="'+ data[i].sqlTable+'" sourceTablePrefix="'+ data[i].sourceTablePrefix +'"><td><span class="data-size" caption="' + data[i].name + '" columnName="' + data[i].columnName + '" tableName="' + sourceTable + '">' + columnName + '</span></td><td sourceTable="' + sourceTable + '">' + sourceAlias + '</td></tr>';
+            }
+        }
+        if (tr == "") {
+            $form.find("#createCol").remove();
+            $("<p class='loading-table'>暂无数据</p>").appendTo($form.find("#table3Box").show());
+        } else {
+            $(tr).appendTo($form.find("#createCol"));
+        }
+
+
+        // $("#jsgs", $form).mCustomScrollbar({
+        //      theme:"dark",
+        //      axis: "y",
+        //      //advanced:{ updateOnContentResize: true }
+        //   });
+    },
+    // 点击删除 已选公式
+    delCLick: function() {
+        $form.find("#jsgs").on("click", ".del", function() {
+            $(this).parent().remove();
+            var spanText = "",
+                spanText1 = "";
+            $("#jsgs").find(".c-text1").each(function(i, v) {
+                if ($(v).parent().hasClass("ysf") && $(v).parent().hasClass("division")) {
+                    //nullif(value1, value2)
+                    spanText += $(v).text();
+                    spanText1 += '#$#nullif(' + $(v).text() + ',0)#$#';
+                } else if($(v).parent().hasClass("ysf")){
+                    spanText += $(v).text();
+                    // spanText1 += '#$#' + $(v).text() + '#$#';  测试不加#$#
+                    spanText1 +=  $(v).text() ;
+                } else {
+                    if($(v).parent().attr("sqltable") == "true"){
+                       spanText += '[Measures]' + '.[' + $(v).parent().attr("caption") + ']';
+                        spanText1 += "if (\"" + $(v).parent().attr("sourceTableAlias")  +"\".\"" +$(v).attr("columnName") + "\" is null , 0 , TRY_CAST(\"" + $(v).parent().attr("sourceTableAlias")  +"\".\"" +$(v).attr("columnName") + "\" AS $REAL$))";
+                    }else{
+                        spanText += '[Measures]' + '.[' + $(v).parent().attr("caption") + ']';
+                        spanText1 += "if (\"" + $(v).parent().attr("sourcetableprefix") + "_" + $(v).parent().attr("table") +"\".\"" +$(v).attr("columnName") + "\" is null , 0 ,TRY_CAST(\"" + $(v).parent().attr("sourcetableprefix") + "_" + $(v).parent().attr("table") +"\".\"" +$(v).attr("columnName") + "\" AS $REAL$))";
+                         // + $(v).parent().attr("caption");
+                    }
+                }
+            });
+
+            $form.find("#actualFormula").val(spanText1);
+            $form.find("#jsgsInput").val(spanText);
+            //$("#jsgs", $form).mCustomScrollbar("update");
+        })
+    },
+    // 点计算法 符号
+    clickSymbol: function() {
+        $form.on("click", ".data-size", function() {
+            var text1, text, columnName = $(this).attr("columnName") || "";
+            var $leftList = $tagertL.data().getPageData();
+            var span = $('<span class="c-text"><span class="c-text1" columnName="' + columnName + '">' + $(this).text() + '</span></span>').append($('<span class="del">x</span>')).appendTo($("#jsgs", $form));
+            if ($(this).parent().hasClass("col-md-4")) {
+                if($(this).parent().hasClass('division')){
+                    span.addClass('division');
+                }
+                span.addClass("ysf");
+                text = $.trim($("#jsgs").find(".c-text1").last().text());
+                if($(this).parent().hasClass('division')){
+                    //nullif(value1, value2)
+                    text1 = $.trim($form.find("#actualFormula").val()) + "#$#nullif(" + $("#jsgs").find(".c-text1").last().text() + ",0)#$#";
+                }else{
+                    // text1 = $.trim($form.find("#actualFormula").val()) + "#$#" + $("#jsgs").find(".c-text1").last().text() + "#$#";  测试不加#$#
+                    text1 = $.trim($form.find("#actualFormula").val()) + $("#jsgs").find(".c-text1").last().text();
+                }
+            } else {
+                span.attr("sourcetableprefix", $(this).parents("tr").attr("sourcetableprefix"));
+                span.attr("table", $(this).parent().next().attr("sourceTable"));
+                span.attr("caption", $(this).attr("caption"));
+                span.attr("sqltable",$(this).parents("tr").attr("sqltable"));
+                span.attr("sourceTableAlias",$(this).parents("tr").attr("sourceTableAlias"))
+                var tableName = $(this).attr("tableName");
+                var symbol = '\"';
+                var dbTypes = $leftList.type;
+                if (dbTypes == "1") {
+                    text = '\'' + tableName + '\'' + '.\'' + $(this).attr("caption") + '\'';
+                } else {
+                    text = '\"' + tableName + '\"' + '.\"' + $(this).attr("caption") + '\"';
+                }
+                //symble改为"分
+                if (dbTypes == 1 || dbTypes == 11) {
+                    symbol = "\"";
+                }
+                if($(this).parents("tr").attr("sqltable") == "true"){
+                    // text1 = $.trim($form.find("#actualFormula").val()) + "TRY_CAST(" + symbol + $(this).parents("tr").attr("sourceTableAlias")  + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol + " AS $REAL$)";
+                    text1 = $.trim($form.find("#actualFormula").val()) + "if ("+ symbol + $(this).parents("tr").attr("sourceTableAlias")  + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol +" is null , 0 , TRY_CAST(" + symbol + $(this).parents("tr").attr("sourceTableAlias")  + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol + " AS $REAL$))";
+                }else{
+                    text1 = $.trim($form.find("#actualFormula").val()) + "if ("+ symbol + $(this).parents("tr").attr("sourcetableprefix") + "_" + $.trim($(this).parent().next().attr("sourceTable")) + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol +" is null , 0 , TRY_CAST(" + symbol + $(this).parents("tr").attr("sourcetableprefix") + "_" + $.trim($(this).parent().next().attr("sourceTable")) + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol + " AS $REAL$))";
+                }
+                
+                // +"."+$(this).attr("caption"));
+            }
+
+            $form.find("#actualFormula").val(text1);
+            $form.find("#jsgsInput").val($form.find("#jsgsInput").val() + text);
+            //加滚动条
+            $("#jsgs", $form).mCustomScrollbar("destroy");
+            $("#jsgs", $form).mCustomScrollbar({
+                theme:"dark",
+                axis: "y",
+                advanced:{ updateOnContentResize: true }
+            });
+        });
+    },
+    // 点击 条件框
+    clickTerm: function() {
+        // $("#jsgs",$form).on("click",function(e){
+        //   if(e.target.id=="jsgs"){
+        //     dac.alert("请选择数据字段!");
+        //   }
+        // });
+    }
+};
+sizeCont.init();
+
+</script>
+ -->
