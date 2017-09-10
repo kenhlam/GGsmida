@@ -1,175 +1,64 @@
-    #formContainerSize .form-horizontal{
-        padding: 20px 15px;
-    }
-  /*  #formContainerSize .form-container .form-item input[type=text]{
-        height: 13px;
-        line-height: 13px;
-        padding: 4px 6px;
-        float: left;
-        margin: 0 2px;
-        font-size: 12px;
-        font-family: "SimSun";
-    }
-    #formContainerSize .form-group .data-nav{
-        height: 33px;
-        line-height: 33px;
-    }
-    #formContainerSize .form-group  input[type='text'],.form-group  input[type='password'],.form-group select{
-        width: 300px;
-        height:28px ;
-        font-size: 12px;
-        margin-top: 3px;
-        margin-left: 6px;
-    }
-    #formContainerSize .form-group .control-label{
-        width: 130px;
-    }
-    #formContainerSize div.flaot-l {
-        display: inline-block;
-        vertical-align: middle;
-    }
-    #formContainerSize .loading-table {
-        height: 95px;
-        line-height: 95px;
-        text-align: center;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        font-size: 24px;
-        font-weight: bold;
-        margin-top: -47px;
-        margin-left: -140px;
-    }*/
-
-    /*以上是公共样式抽离*/
-
-
-    /*#formContainerSize .form-group input[type='text'],
-    .form-group input[type='password'],
-    .form-group select {
-        width: 220px;
-        height: 25px;
-        margin-top: 3px;
-        margin-left: 6px;
-    }
-    
-    #formContainerSize table th {
-        font-size: 12px;
-        padding: 0 20px;
-        height: 30px;
-        line-height: 30px;
-    }
-
-    #formContainerSize table td {
-        height: 30px;
-        line-height: 30px;
-        font-size: 12px;
-        padding: 0 20px;
-    }
-
-    #formContainerSize .tab-header a {
-        display: inline-block;
-        width: 69px;
-        height: 20px;
-        line-height: 20px;
-        text-align: center;
-    }
-    
-    #formContainerSize ul.tab-list li {
-        padding: 0 20px;
-        height: 30px;
-        line-height: 30px;
-    }
-        
-    .tab-list .col-md-4 {
-        height: 30px;
-        line-height: 30px;
-    }
-
-    #jsgs {
-        min-height: 40px;
-        height: 100px;
-        width: 495px;
-        margin-left: 6px;
-    }
-
-    #formContainerSize .c-text {
-        margin-left: 5px;
-        border-radius: 2px;
-        font-size: 12px;
-        padding: 4px 10px;
-        display: inline-block;
-        position: relative;
-    }
-
-    #formContainerSize .c-text .del {
-        position: absolute;
-        right: 2px;
-        top: -4px;
-        cursor: pointer;
-    }
-
-    .tab-list-1 .data-size {
-        font-size: 16px;
-    }
-
-    #formContainerSize .data-size {
-        cursor: pointer;
-    }
-   
-    #formContainerSize #createCol {
-        position: relative;
-        width: 350px;
-    }
-
-    #formContainerSize #table3Box {
-        display: none;
-        width: 100%;
-        height: 180px;
-        position: relative;
-    }*/
-/*border: 1px solid #CCCCCC;*/
-/*background:#D7DCE0*/
-/*background: url(../../img2/icon.png) no-repeat;*/
+#formContainerSize .mCSB_scrollTools{
+    width:8px;
+}
+#formContainerSize .mCS-dark.mCSB_scrollTools .mCSB_draggerRail{
+    background-color: rgba(0,0,0,0);
+}
+#formContainerSize .mCSB_inside > .mCSB_container{
+    margin-right: 0;
+}
+#formContainerSize .alert-footer button {
+    padding: 7px 35px;
+    margin-right: 20px;
+}
+#formContainerSize.form-horizontal{
+    padding: 15px 15px;
+    height: 400px;
+    width: 971px;
+}
 #formContainerSize .left{
     float: left;
     /*background:skyblue;*/
-    width:480px;
+    /*width:480px;*/
     color:#000;
-    height: 392px;
+    margin-right: 10px;
+    height: 410px;
 }
 #formContainerSize .right{
-    float: left;
+    float: right;
     background:orange;
-    width: 280px;
-    padding-top: 5px;
+    width: 360px;
+    padding-top: 7px;
     background: #f9f9f9;
     color:#000;
-    height: 338px;
+    height: 345px;
 }
 
 #formContainerSize .preName{
-    height: 33px;
-    line-height: 33px;
+    height: 26px;
+    line-height: 26px;
     width:70px;
-    padding-right:10px;
+    padding-right:4px;
     text-align: right;
     float: left;
  }
 #formContainerSize .calName input{
-    height: 33px;
-    line-height: 33px;
-    width: 400px;
+    height: 26px;
+    padding-left: 5px;
+    line-height: 26px;
+    width: 500px;
+    border:1px solid #cdd0e3;
+    border-radius: 4px;
 }
 #formContainerSize .list,.type{
-    height: 35px;
-    margin: 10px 0 0 0;
+    height: 37px;
+    margin: 14px 0 0 0;
 }
 #formContainerSize .selectList{
-    width: 100px;
-    line-height: 33px;
+    width: 129px;
+    line-height: 26px;
     display: none;
-    top: 33px;
+    top: 25px;
     position: absolute;
     z-index: 3;
     /*float: left;*/
@@ -179,18 +68,29 @@
     overflow-y: auto;
     background: #f9f9f9;
 }
+#formContainerSize .selectList li{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+#formContainerSize #formulaList li{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 #formContainerSize #contWrap{
-    width: 400px;
-    height: 260px;
+    height: 275px;
     position: relative;
 }
 #formContainerSize #showArea{
+    border-radius: 4px;
+    border: 1px solid #cdd0e3;
     white-space: nowrap;
     position: absolute;
     left: 70;
     top: 0;
-    width: 400px;
-    height: 260px;
+    width: 500px;
+    height: 275px;
     font-size: 12px;
     color:#000;
     word-wrap: break-word;
@@ -198,16 +98,18 @@
     overflow: auto;
 }
 #formContainerSize #editArea{
-    white-space: nowrap; 
+    border-radius: 4px;
+    border: 1px solid #cdd0e3;
+    white-space:pre; 
     word-break: break-all;
     z-index: 2;
     position: absolute;
     left: 70;
     top: 0;
-    width: 400px;
-    height: 260px;
-    /*text-fill-color:transparent;*/
-    /*-webkit-text-fill-color:transparent;*/
+    width: 500px;
+    height: 275px;
+    text-fill-color:transparent;
+    -webkit-text-fill-color: transparent;
     font-size: 12px;
     background: transparent;
 }
@@ -222,57 +124,15 @@
     position: absolute;
     display: block;
     z-index: 100;
-    width: 102px;
+    width: 120px;
 }
-    
-/*#formContainerSize .type .switch{
-    display: block;
-    left: 84px;
-    z-index: 3;
-    position: absolute;
-    float: left;
-    width: 100px;
-    border: 1px solid #ccc;
-    line-height: 25px;
-    float: left;
-    cursor: pointer;
-    padding-left: 5px;
-}
-#formContainerSize .type .switch span{
-    display: block;
-    position: relative;
-    height: 25px;
-    width: 100px;
-    line-height: 25px;
-    float: left;
-    cursor: pointer;
-    padding-left: 5px;
-}
-#formContainerSize .type .switch span:hover{
-    cursor: pointer;
-    color: #fff;
-    background:#40c0a8;
-}
-#formContainerSize .type .switch span i{
-    position: absolute;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    top: 7px;
-    right: 7px;
-}*/
-/*#formContainerSize .type ul{
-    height: 33px;
-    width: 100px;
-    line-height: 33px;
-    float: left;
-}*/
+ 
 #formContainerSize .formula{
-    width: 110px;
+    width: 114px;
     float: left;
-    border: 1px solid #CCCCCC;
+    /*border: 1px solid #CCCCCC;*/
     margin-left:10px;
-    margin-top: 17px;
+    /*margin-top: 17px;*/
 }
 #formContainerSize .formula .searchWrap{
     position: relative;
@@ -288,37 +148,46 @@
 }
 #formContainerSize .formulaExp{
     height: 300px;
-    width: 155px;
+    width: 200px;
     float: left;
     padding: 15px;
 }
+#formContainerSize .formulaExp span{
+    word-break: break-all;
+}
 #formContainerSize .formulaExp .title{
-    font-size: 14px;
+    font-size: 12px;
     font-weight:600;
     line-height: 25px;
     margin: 2px 0;
 }
 #formContainerSize .formulaExp .details{
-    font-size: 14px;
+    font-size: 12px;
     line-height: 25px;
     margin: 2px 0;
+    height: 120px;
 }
 #formContainerSize .formulaExp .exp{
-    font-size: 14px;
+    font-size: 12px;
     line-height: 25px;
     margin: 2px 0;
+    height: 130px;
+}
+#formContainerSize .formulaExp .exp b{
+    color:#cda665;
 }
 #formContainerSize .formula input{
-    width: 90px;
-    height: 30px;
-    line-height: 30px;
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
     padding: 0 5px;
     border: none;
-    border-bottom: 1px solid #ccc;
 }
 #formContainerSize #formulaList{
-    height: 260px;
+    height: 300px;
     background: white;
+    border: 1px solid #cdd0e3;
+    border-top:none;
 }
 #formContainerSize #formulaList li{
     padding-left: 5px;
@@ -326,21 +195,20 @@
     line-height: 30px;
 }
 #formContainerSize #formulaList li:hover{
-    background: #40c0a8;
+    background: #01a2d9;
     color:#fff;
     cursor: pointer;
 }
 #formContainerSize .selectDiv{
     float: left;
     position: relative; 
-    border: 1px solid #CCCCCC;
-    margin-right:10px;
+    margin-right:14px;
 }
 #formContainerSize .selectDiv span{
     display: block;
-    height: 25px;
-    width: 100px;
-    line-height: 25px;
+    height: 26px;
+    width: 130px;
+    line-height: 26px;
     float: left;
     cursor: pointer;
     padding-left: 5px;
@@ -361,12 +229,13 @@
     line-height: 30px;
 }
 #formContainerSize .selectDiv .selectList li:hover{
-    background:#40c0a8;
+    background:#01a2d9;
     color: #fff;
     cursor: pointer;
 }
-.mCSB_scrollTools{
-    width:8px;
+
+.blueBg{
+    background: #ddd;
 }
 /*公式样式定义*/
 #formContainerSize .num{
@@ -375,19 +244,30 @@
 #formContainerSize .sum{
     color:yellow;
 }
-.ysf{
-    color: #f00;
+#formContainerSize .ysf{
+    color: #acc;
 }
-.col{
+#formContainerSize .col{
     color:blue;
 }
-.keyWords{
+#formContainerSize .keyWords{
     color:gray;
 }
-.illegal{
+#formContainerSize .illegal{
     color:red!important;
 }
-
+#formContainerSize #errMsg{  
+    white-space: nowrap;
+    overflow: hidden;
+    width: 300px;
+    font-size: 12px;
+    color: red;
+    height: 26px;
+    line-height: 26px;
+    float: left;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
 
 
 

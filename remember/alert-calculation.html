@@ -1,28 +1,27 @@
-<form class="form-horizontal form-container" id="formContainerSize" style="width: 800px">
+<form class="form-horizontal form-container" id="formContainerSize">
    <div class="left">
         <div class="calName">
-            <div class="preName">名称：</div>
-            <input type="text">
+            <div class="preName">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_1')}}</div>
+            <input type="text" placeholder="{{$i18n('pages_tpl_alertHtml_alert-calculation_html_2')}}">
         </div>
         <div class="list">
-            <div class="preName">表达式：</div>
+            <div class="preName">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_3')}}</div>
             <div class="selectDiv">
-                <span class="toggleList">插入维度<i></i></span>
+                <span class="toggleList">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_4')}}<i></i></span>
                 <ul class="selectList" id="js_insertDimension">
                 </ul>
             </div>
             <div class="selectDiv">
-                <span class="toggleList">插入度量<i></i></span>
+                <span class="toggleList">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_5')}}<i></i></span>
                 <ul class="selectList" id="js_insertMeasure">
                 </ul>
             </div>
-            <div class="selectDiv">
-                <span class="toggleList">插入参数<i></i></span>
+            <div class="selectDiv sysParams">
+                <span class="toggleList">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_6')}}<i></i></span>
                 <ul class="selectList">
-                    <li>插入参数1</li>
-                    <li>插入参数2</li>
-                    <li>插入参数3</li>
-                    <li>插入参数4</li>
+                    <li sysPar="{{$i18n('pages_tpl_alertHtml_alert-calculation_html_7')}}">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_7')}}</li>
+                    <li sysPar="{{$i18n('pages_tpl_alertHtml_alert-calculation_html_8')}}">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_8')}}</li>
+                    <li sysPar="{{$i18n('pages_tpl_alertHtml_alert-calculation_html_9')}}">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_9')}}</li>
                 </ul>
             </div>
         </div>
@@ -34,56 +33,80 @@
             </div>
         </div>
         <div class="type">
-            <div class="preName">类型：</div>
+            <div class="preName">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_10')}}</div>
             <div class="selectDiv notInsert">
-                <span class="toggleList"><span>维度</span><i></i></span>
+                <span class="toggleList"><span id="dimensionOrmesure">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_11')}}</span><i></i></span>
                 <ul class="selectList" style="border:1px solid #ccc;display: none;">
-                    <li style="height:25px;line-height:25px;padding-left: 10px;">度量</li>
+                    <li style="height:25px;line-height:25px;padding-left: 10px;">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_12')}}</li>
                 </ul>
             </div>
+            <div id="errMsg"></div>
         </div>
     </div>
     <div class="right">
         <div class="formula">
             <div class="searchWrap">
-                <input type="text" placeholder="请输入关键字">
-                <i></i>
+                <input type="text" placeholder="{{$i18n('pages_tpl_alertHtml_alert-calculation_html_13')}}">
+                <!-- <i></i> -->
             </div>
             <ul id="formulaList">
             </ul>
         </div>
         <div class="formulaExp">
-            <p class="title">SUM(表达式)</p>
-            <p class="details">返回表达式中所有值的总和。SUM只能用于数字字段</p>
-            <p class="exp"><b>示例：</b><span>SUM([销售额])</span></p>
+            <p class="title">{{$i18n('pages_tpl_alertHtml_alert-calculation_html_14')}}</p>
+            <p class="details"><span>{{$i18n('pages_tpl_alertHtml_alert-calculation_html_15')}}</span></p>
+            <p class="exp"><b>{{$i18n('pages_tpl_alertHtml_alert-calculation_html_16')}}</b><span>{{$i18n('pages_tpl_alertHtml_alert-calculation_html_17')}}</span></p>
         </div>
     </div>
 </form>
 <script>
+    // require(["alertCalculation"],function(alertCalculation){
+    //     alertCalculation.init();
+    // })
+</script>
+<script>
     var calculationObj = require("calculation");
-    console.log(calculationObj)
     var $form = $("#formContainerSize");
     var calculation = {
         init:function(){
             var that = this;
-            that.htmlInit();
+            // 获取表达式正则
+            var reString = "({\\$"+$i18n('pages_tpl_alertHtml_alert-calculation_html_9')+"})|({\\$"+$i18n('pages_tpl_alertHtml_alert-calculation_html_7')+"})|({\\$"+$i18n('pages_tpl_alertHtml_alert-calculation_html_8')+"})|(^SUM$)|(^AND$)|(^OR$)|(^NOT$)|(^IF$)|(^AVG$)|(^COUNTD$)|(^COUNT$)|(^MIN$)|(^MAX$)|(STDDEV_POP)|(STDDEV_SAMP)|(VAR_POP)|(VAR_SAMP)|(^POWER$)|(^LOG$)|(^ABS$)|(^CEIL$)|(^FLOOR$)|(^DATE$)|(^DATETIME$)|(TRY_CAST)|(^AS$)|(VARCHAR)|(^DOUBLE$)|(^NULL$)|(^SUBSTR$)|(^LENGTH$)|(^UPPER$)|(^LOWER$)|(^INT$)|(^NOW$)|(^NULL$)|(^IS$)|(^IFNULL$)|(^ZN$)|(DATE_FORMAT)|(DATE_PARSE)|(^ROUND$)|(^CASE$)|(^END$)|(^TRUE$)|(^FALSE$)|(^TRY$)|(\\[[^\\[]+\\])|(\\+)|(\\-)|(\\*)|(\\/)|(>=)|(>)|(<=)|(<)|(==)|(!=)|(=)|(\\|\\|)|(\\()|(\\))|([0-9.]+)|(,)|(\\\'[^\\\']*\\\')|(\\\')|(\\\"[^\\\"]+\\\")|(\\\")|([a-zA-Z]+)|(\\s)|(\\n)|([^\\\']+)"
+            that.splitReg = new RegExp(reString,"gi");
             // 初始化colunms
             that.selectListInit();
+            that.htmlInit();
             that.renderEdit();
         },
         htmlInit:function(){
             var that = this
             // 编辑
-            // try{
-            //     if($("#formContainer").getPageData().haha == "edit"){
-            //         var showBackText = [];
-            //         var formulaArr = $(".search-fitter", $tagertR).find("li.create-size").data().sizeData().look;
-            //         $.each(formulaArr,function(index, el) {
-            //             this.
-            //         });
-            //         that.insertText(document.getElementById("editArea"),showBackText);
-            //     }
-            // }catch(e){}
+            var pageData =$("#formContainer").getPageData() ;
+            try{
+                //计算字段修改 
+                if(pageData.state == "edit"){
+                    var currentCalName = pageData.calName;
+                    var currentCalObj = {};
+                    var calDataArr = $(".search-fitter", $tagertR).find("li.create-size").data().sizeData().look;
+                    $.each(calDataArr,function(){
+                        if(this.name == currentCalName){
+                            currentCalObj = this;
+                            return false
+                        }
+                    })
+                    $("#dimensionOrmesure").attr("userctrl","true");
+                    if(currentCalObj.type == "measure"){
+                        $("#dimensionOrmesure").text($i18n('pages_tpl_alertHtml_alert-calculation_html_12'))
+                    }else{
+                        $("#dimensionOrmesure").text($i18n('pages_tpl_alertHtml_alert-calculation_html_11'))
+                    }
+                    // currentEdit 有于在修改验证名称时，判断名称重复问题
+                    $form.find(".calName input").val(currentCalObj.name).attr("currentEdit",currentCalObj.name);
+                    that.insertText(document.getElementById("editArea"),currentCalObj.formula);
+                }
+            }catch(e){
+
+            }
             
             var that = this;
             //表达式行的点击下拉样式操作
@@ -94,11 +117,12 @@
                     $showSelect.parents(".selectDiv").siblings().find(".selectList").hide()
                 }
                 if($(this).parents(".selectDiv").hasClass('notInsert')){
+                    $("#dimensionOrmesure").attr("userCtrl",true);
                     var showText = $(".notInsert .toggleList").text();
-                    if(showText == "维度"){
-                        $(".notInsert li").text("度量")
+                    if(showText == $i18n('pages_tpl_alertHtml_alert-calculation_html_11')){
+                        $(".notInsert li").text($i18n('pages_tpl_alertHtml_alert-calculation_html_12'))
                     }else{
-                        $(".notInsert li").text("维度")
+                        $(".notInsert li").text($i18n('pages_tpl_alertHtml_alert-calculation_html_11'))
                     }
                 }
                 //隐藏下拉
@@ -108,14 +132,32 @@
 
             // 失焦验证
             $("#editArea").off("blur").on("blur",function(){
-                var normalValidateResult = calculationObj.checkJsgs($form);
-                console.log(normalValidateResult.state)
-                console.log(normalValidateResult.msg)
-                var deepValidataResult = calculationObj.validator($(".calName input",$form).val(),$("#editArea",$form).val());
-                console.log(deepValidataResult)
+                var actualFormula = $("#editArea").val();
+                var formulaName = $(".calName input").val();
+                var normalValidateResult = calculationObj.checkJsgs($form,formulaName,actualFormula);
+                calculationObj.showErrMsg(normalValidateResult);
+                
+                var dataType = calculationObj.getDataType(actualFormula,$("#dimensionOrmesure",$form));
+                if($("#dimensionOrmesure").attr("userctrl")){
+                    //用户选择了就以用户选择为准  没有选择，以预判断为准
+                   // dimensionOrMesure = $(".type").find(".toggleList span").text() == $i18n("js_calculation_js_36") ? "dimension" : "measure"; 
+                }else{
+                    if(dataType == "integer"){
+                        $("#dimensionOrmesure").text($i18n('pages_tpl_alertHtml_alert-calculation_html_12'))
+                    }else{
+                        $("#dimensionOrmesure").text($i18n('pages_tpl_alertHtml_alert-calculation_html_11'))
+                    }
+                }
+            })
+            $("#editArea").off("input propertychange").on("input propertychange",function(){
+                var a = "";
+                a = $("#editArea").val().match(that.splitReg)
+                // 获取值并分割成数组
+                a = a ? a : []
+                var htmlData = that.changeToHTMLData(a);
+                that.createJspzHtml(htmlData,"showArea");
             })
             
-
             // textarea滚动时同步 showDiv滚动
             $("#editArea").off("scroll").on("scroll",function(){
                 $("#showArea").scrollLeft($("#editArea").scrollLeft())
@@ -125,108 +167,478 @@
             $form .off("click",".selectDiv .selectList li").on("click",".selectDiv .selectList li",function(){
                 if($(this).parents(".selectDiv").hasClass('notInsert')){
                     var thisText = $(this).text()
-                    $(this).parents(".notInsert").find(".toggleList span").text(thisText);
+                    $("#dimensionOrmesure").text(thisText)
                     $(this).parents(".selectList").hide();
                     return
                 }
                 var insertStr = "[" + $(this).text() +"]";
+                if($(this).parents(".selectDiv").hasClass('sysParams')){
+                    insertStr = "{$" + $(this).attr("sysPar") +"}";
+                }
+                
                 $(this).parents(".selectList").hide();
                 that.insertText(document.getElementById("editArea"),insertStr);
             });
             //公式formulaList li点击事件  
             var listObjArr = [
                 {
-                    name:"求和聚合",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"SUM([表达式])",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_18'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_19'),
                     showExpress:{
-                        title:"SUM(表达式)",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段",
-                        exp:"SUM([销售额])"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_14'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_20'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_17')
+                    }
                 },{
-                    name:"平均聚合",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_21'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_22'),
                     showExpress:{
-                        title:"SUM(表达式)1",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段1",
-                        exp:"SUM([销售额])1"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_23'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_24'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_25')
+                    }
                 },{
-                    name:"计数聚合",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                   name:$i18n('pages_tpl_alertHtml_alert-calculation_html_26'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_27'),
                     showExpress:{
-                        title:"SUM(表达式)2",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段2",
-                        exp:"SUM([销售额])2"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_33'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_29'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_32')
+                    }
                 },{
-                    name:"去重计数聚合",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_31'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_35'),
                     showExpress:{
-                        title:"SUM(表达式)3",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段3",
-                        exp:"SUM([销售额])3"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_28'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_34'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_30')
+                    }
                 },{
-                    name:"最大值聚合",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_36'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_37'),
                     showExpress:{
-                        title:"SUM(表达式)4",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段4",
-                        exp:"SUM([销售额])4"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_38'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_39'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_40')
+                    }
                 },{
-                    name:"最小值聚合",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_41'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_42'),
                     showExpress:{
-                        title:"SUM(表达式)5",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段5",
-                        exp:"SUM([销售额])5"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_43'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_44'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_45')
+                    }
                 },{
-                    name:"加法",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_46'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_47'),
                     showExpress:{
-                        title:"SUM(表达式)6",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段6",
-                        exp:"SUM([销售额])6"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_48'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_49'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_50')
+                    }
                 },{
-                    name:"减法",//显示名字
-                    realName:"",//参数名字
-                    inputType:"",//输入数据类型
-                    outputType:"",//计算结果类型
-                    insertStr:"",//插入写字板文字
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_51'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_52'),
                     showExpress:{
-                        title:"SUM(表达式)7",
-                        details:"返回表达式中所有值的总和。SUM只能用于数字字段7",
-                        exp:"SUM([销售额])7"
-                    }//表达式明说
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_53'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_54'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_55')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_56'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_57'),
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_58'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_59'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_60')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_61'),
+                    realName:"",
+                    inputType:"col_num",
+                    outputType:"num",
+                    insertStr:$i18n('pages_tpl_alertHtml_alert-calculation_html_62'),
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_63'),
+                        detail:$i18n('pages_tpl_alertHtml_alert-calculation_html_64'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_65')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_66'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"1\' + \'" + $i18n('pages_tpl_alertHtml_alert-calculation_html_67')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_69'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_70'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_71')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_72'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"1\' -\'" +$i18n('pages_tpl_alertHtml_alert-calculation_html_67')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_73'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_74'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_75')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_76'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"1\' * \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_67') +"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_77'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_78'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_79')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_80'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"1\' / \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_67')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_81'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_82'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_83')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_84'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"POWER(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_85')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_86')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_87'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_88'),
+                        exp:"POWER(2, 3) = 2 * 2 * 2 = 8"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_89'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"LOG(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_90')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_85')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_91'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_92'),
+                        exp:"LOG(16,2) = 4"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_93'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"ABS(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_94')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_95'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_96'),
+                        exp:"ABS(-7) = 7"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_97'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"CEIL(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_94')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_98'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_99'),
+                        exp:"CEIL(3.1415) = 4"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_100'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"FLOOR(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_94')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_101'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_102'),
+                        exp:"FLOOR(200.7) = 200，FLOOR(-1.5) = -2"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_103'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"1\' \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_104')+"\' \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_67')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_105'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_106'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_107')
+                    }
+                },{
+                    // 逻辑与
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_108'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_110')+"1\' AND \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_109')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_110')+"1 AND "+$i18n('pages_tpl_alertHtml_alert-calculation_html_109'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_111'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_112')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_113'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_110')+"1\' OR \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_109')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_114'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_115'),
+                        exp:"["+$i18n('pages_tpl_alertHtml_alert-calculation_html_117')+"] = '"+$i18n('pages_tpl_alertHtml_alert-calculation_html_118')+"\' "+$i18n('pages_tpl_alertHtml_alert-calculation_html_116')+" \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_119')+"'"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_120'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"NOT \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_110')+"\'",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_121'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_122'),
+                        exp:"NOT ["+$i18n('pages_tpl_alertHtml_alert-calculation_html_117')+"] = '"+$i18n('pages_tpl_alertHtml_alert-calculation_html_118')+"'",
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_123'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"TRY_CAST(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\' AS VARCHAR)",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_124'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_125'),
+                        exp:"TRY_CAST(200 AS VARCHAR) = '200'"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_126'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"SUBSTR(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_128')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_129')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_127')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_130'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_131'),
+                        exp:"SUBSTR('abc123', 1, 3) = 'abc'， SUBSTR('abc123', 2) = 'bc123'"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_132'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"LENGTH(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_128')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_133'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_134'),
+                        exp:"LENGTH('abc123') = 6"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_135'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"REPLACE(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_128')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_137')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_136')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_138'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_139'),
+                        exp:"REPLACE('Calculation', 'ion', 'ed') = 'Calculated'"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_140'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"UPPER(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_128')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_141'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_142'),
+                        exp:"UPPER('product') = 'PRODUCT'"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_143'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"LOWER(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_128')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_144'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_145'),
+                        exp:"LOWER('PRODUCT') = 'product'"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_146'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"TRY_CAST(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\' AS DOUBLE)",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_147'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_148'),
+                        exp:"TRY_CAST('2.1' AS DOUBLE)=2.1"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_149'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"TRY_CAST(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\' AS INTEGER)",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_150'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_151'),
+                        exp:"TRY_CAST('2' AS INTEGER)=2，TRY_CAST('2.1' AS INTEGER)=null"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_152'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"IF(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_154')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_155')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_153')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_156'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_157'),
+                        exp:"IF(2=2,1,0)=1"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_158'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"CASE \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\' WHEN \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_159')+"1\' THEN \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_160')+"1\' ELSE \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_159xx')+"\' END",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_162'),
+                        details:"CASE ["+$i18n('pages_tpl_alertHtml_alert-calculation_html_163')+"ID] WHEN 1 THEN '"+$i18n('pages_tpl_alertHtml_alert-calculation_html_164')+"' WHEN 2 THEN '"+$i18n('pages_tpl_alertHtml_alert-calculation_html_165')+"' ELSE ["+$i18n('pages_tpl_alertHtml_alert-calculation_html_163')+"ID] END",
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_166')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_167'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\' IS NULL",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_168'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_169'),
+                        exp:$i18n('pages_tpl_alertHtml_alert-calculation_html_170')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_171'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"IF(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\'  IS NULL,\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\', \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"1\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_172'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_173'),
+                        exp:'IF(['+$i18n('pages_tpl_alertHtml_alert-calculation_html_117')+'] IS NULL, '+"'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_174')+"'"+',['+$i18n('pages_tpl_alertHtml_alert-calculation_html_117')+'])'
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_175'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"IF(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\' IS NULL,0, \'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_68')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_176'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_177'),
+                        exp:"IF(1 IS NULL,0, 1)"
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_178'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"DATE_FORMAT(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_179')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_180')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_181'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_182')+"。\
+                                </br>"+$i18n('pages_tpl_alertHtml_alert-calculation_html_183')+"：\
+                                </br>%Y：4"+$i18n('pages_tpl_alertHtml_alert-calculation_html_184')+"\
+                                </br>%y："+$i18n('pages_tpl_alertHtml_alert-calculation_html_185')+"\
+                                </br>%m："+$i18n('pages_tpl_alertHtml_alert-calculation_html_186')+"(01-12)\
+                                </br>%d："+$i18n('pages_tpl_alertHtml_alert-calculation_html_187')+"(1-31)\
+                                </br>%H："+$i18n('pages_tpl_alertHtml_alert-calculation_html_188')+"(00-23)\
+                                </br>%h："+$i18n('pages_tpl_alertHtml_alert-calculation_html_188')+"(01-12)\
+                                </br>%i："+$i18n('pages_tpl_alertHtml_alert-calculation_html_189')+"(00-59)\
+                                </br>%s："+$i18n('pages_tpl_alertHtml_alert-calculation_html_190')+"(00-59)\
+                                </br>%T："+$i18n('pages_tpl_alertHtml_alert-calculation_html_191')+"(hh:mm:ss)\
+                                </br>%p：AM PM",
+                        exp:"DATE_FORMAT(now(),'%Y-%m-%d'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_192')+"'%Y/%m/%d %T')"+$i18n('pages_tpl_alertHtml_alert-calculation_html_193')+"2017"+$i18n('pages_tpl_alertHtml_alert-calculation_html_194')+"2"+$i18n('pages_tpl_alertHtml_alert-calculation_html_195')+"14"+$i18n('pages_tpl_alertHtml_alert-calculation_html_187')+" 18"+$i18n('pages_tpl_alertHtml_alert-calculation_html_196')+"30"+$i18n('pages_tpl_alertHtml_alert-calculation_html_189')+"15"+$i18n('pages_tpl_alertHtml_alert-calculation_html_190')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_197'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"DATE_PARSE(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_128')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_180')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_198'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_182')+"\
+                                </br>"+$i18n('pages_tpl_alertHtml_alert-calculation_html_183')+"：\
+                                </br>%Y：4"+$i18n('pages_tpl_alertHtml_alert-calculation_html_184')+"\
+                                </br>%y："+$i18n('pages_tpl_alertHtml_alert-calculation_html_185')+"\
+                                </br>%m："+$i18n('pages_tpl_alertHtml_alert-calculation_html_186')+"(01-12)\
+                                </br>%d："+$i18n('pages_tpl_alertHtml_alert-calculation_html_187')+"(1-31)\
+                                </br>%H："+$i18n('pages_tpl_alertHtml_alert-calculation_html_188')+"(00-23)\
+                                </br>%h："+$i18n('pages_tpl_alertHtml_alert-calculation_html_188')+"(01-12)\
+                                </br>%i："+$i18n('pages_tpl_alertHtml_alert-calculation_html_189')+"(00-59)\
+                                </br>%s："+$i18n('pages_tpl_alertHtml_alert-calculation_html_190')+"(00-59)\
+                                </br>%T："+$i18n('pages_tpl_alertHtml_alert-calculation_html_191')+"(hh:mm:ss)\
+                                </br>%p：AM PM",
+                        exp:"DATE_PARSE('2017-02-14','%Y-%m-%d') "+$i18n('pages_tpl_alertHtml_alert-calculation_html_199')+"2017"+$i18n('pages_tpl_alertHtml_alert-calculation_html_194')+"2"+$i18n('pages_tpl_alertHtml_alert-calculation_html_195')+"14"+$i18n('pages_tpl_alertHtml_alert-calculation_html_187')+",DATE_PARSE('2017/02/14 18:30:15','%Y/%m/%d %T')"+$i18n('pages_tpl_alertHtml_alert-calculation_html_199')+$i18n('pages_tpl_alertHtml_alert-calculation_html_191')+"2017"+$i18n('pages_tpl_alertHtml_alert-calculation_html_194')+"2"+$i18n('pages_tpl_alertHtml_alert-calculation_html_195')+"14"+$i18n('pages_tpl_alertHtml_alert-calculation_html_187')+" 18"+$i18n('pages_tpl_alertHtml_alert-calculation_html_196')+"30"+$i18n('pages_tpl_alertHtml_alert-calculation_html_189')+"15"+$i18n('pages_tpl_alertHtml_alert-calculation_html_190')
+                    }
+                },{
+                    name:$i18n('pages_tpl_alertHtml_alert-calculation_html_200'),
+                    realName:"",
+                    inputType:"",
+                    outputType:"",
+                    insertStr:"ROUND(\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_94')+"\',\'"+$i18n('pages_tpl_alertHtml_alert-calculation_html_201')+"\')",
+                    showExpress:{
+                        title:$i18n('pages_tpl_alertHtml_alert-calculation_html_202'),
+                        details:$i18n('pages_tpl_alertHtml_alert-calculation_html_203'),
+                        exp:"round(2.534,2) "+$i18n('pages_tpl_alertHtml_alert-calculation_html_204')+"2.53\
+                            </br>round(2.535,2) "+$i18n('pages_tpl_alertHtml_alert-calculation_html_204')+"2.54"
+                    }
                 }
-            ];//listObjArr  end
+            ];
+            //listObjArr  end
             $.each(listObjArr,function(idx,val){
-                $("<li>" + val.name + "</li>").data("furmulaItemData",val).appendTo('#formulaList');
+                $("<li title='"+val.name+"'>" + val.name + "</li>").data("furmulaItemData",val).appendTo('#formulaList');
             });
             //绑定公式双击事件
             $("#formulaList",$form).on("dblclick","li",function(){
@@ -236,10 +648,20 @@
             //绑定公式单击事件
             $("#formulaList",$form).on("click","li",function(){
                 var furmulaItemData = $(this).data("furmulaItemData");
-                $(".formulaExp .title",$form).text(furmulaItemData.showExpress.title);
-                $(".formulaExp .details",$form).text(furmulaItemData.showExpress.details);
-                $(".formulaExp .exp span",$form).text(furmulaItemData.showExpress.exp);
-            })
+                $(this).addClass('blueBg').siblings().removeClass('blueBg');
+                $(".formulaExp .title",$form).html(furmulaItemData.showExpress.title);
+                $(".formulaExp .details span",$form).html(furmulaItemData.showExpress.details);
+                $(".formulaExp .exp span",$form).html(furmulaItemData.showExpress.exp);
+                
+                $(".formulaExp .details",$form).mCustomScrollbar({
+                    theme:"dark",
+                    axis: "y",
+                });
+                $(".formulaExp .exp",$form).mCustomScrollbar({
+                        theme:"dark",
+                        axis: "y",
+                    });
+                })
             //绑定公式搜索事件
             $(".formula .searchWrap input").off("keyup").on("keyup",function(){
                 var searchVal = $(this).val().trim();
@@ -254,130 +676,354 @@
             $("#formulaList",$form).mCustomScrollbar({
                 theme:"dark",
                 axis: "y",
-                //advanced:{ updateOnContentResize: true }
             });
          },
         selectListInit:function(){
             var data =  $tagertR.data().dimensions ? $tagertR.data().dimensions().columns : [];
-            var li = "",showName;
+            var caption = $tagertR.data().caption();
+            var li = "",showName,isCal;
             $.each(data,function(idx,val){
-                showName = val.name ? val.name : val.columnName;
-                if(val.type == "dimension"){
+                isCal = val.measureType == "2" || val.measureType == "3";
+                showName = caption[idx];
+                if(val.type == "measure" && !isCal){
                     $("<li title='" + showName + "'>" + showName + "</li>").data("colInfo",val).appendTo('#js_insertMeasure')
-                }else if(val.type == "measure"){
+                }else if(val.type == "dimension" && !isCal){
                     $("<li title='" + showName + "'>" + showName + "</li>").data("colInfo",val).appendTo('#js_insertDimension')
                 }
             });
             $("#js_insertMeasure",$form).mCustomScrollbar({
                 theme:"dark",
                 axis: "y",
-                //advanced:{ updateOnContentResize: true }
             });
             $("#js_insertDimension",$form).mCustomScrollbar({
                 theme:"dark",
                 axis: "y",
-                //advanced:{ updateOnContentResize: true }
             });
         },
         renderEdit:function(){
             var a = "";
             var that = this;
             $("#editArea").on("keyup",function(e){
-                debugger
-                a = $("#editArea").val().replace(/\n/g, "~/~</br>~/~").replace(/ /g,"~/~&nbsp~/~").split("~/~"); //, 获取值并分割成数组
+                a = $("#editArea").val().match(that.splitReg)
+                // 获取值并分割成数组
+                a = a ? a : []
                 var htmlData = that.changeToHTMLData(a);
                 that.createJspzHtml(htmlData,"showArea");
             })
         },
-        changeToHTMLData:function(textareaVal){//数组去空，返回渲染数据
+        changeToHTMLData:function(textareaVal){
+        //数组去空，返回渲染数据
             var result = [];
             var itemArr = [];
             var html = "";
-            var resultObj = {};//结果数据
-            result = $.map(textareaVal,function(val,idx){//去空
+            var resultObj = {};
+            //结果数据
+            result = $.map(textareaVal,function(val,idx){
+            //去空
                 return val ? val : null;
             })
             //根据输入内容生成数据 正则判断类型
-            // num nbsp br  defuaut:str  扩展公式类型 
-            //类型可以设置样式class
+            var measureStr = "";
+            $("#js_insertMeasure li").each(function(){
+                //caption
+                measureStr += $(this).text();
+            });
+            // 逻辑关键字  公式关键字
+            var logicKeyWords = ["IS","DISTINCT","IF","ELSE","CASE","WHEN","AND","OR","THEN","AND","NOT","AS","VARCHAR","DOUBLE","END","ISNULL","NULL","IFNULL","INTEGER","TRUE","FALSE"];
+            // 聚合关键字
+            var jhKeyWords = ["SUM","AVG","COUNT","MIN","COUNTD","MAX","STDDEV_POP","STDDEV_SAMP","VAR_POP","VAR_SAMP"]
+            var sysParam = [$i18n('pages_tpl_alertHtml_alert-calculation_html_205'),$i18n('pages_tpl_alertHtml_alert-calculation_html_206'),$i18n('pages_tpl_alertHtml_alert-calculation_html_207')]
             $.each(result,function(idx,val){
-                // 关键字
-                debugger
-                var keyWords = ["if","else","case","when","and","or","then",","]
                 switch(true)
-                {
-                    case /^[0-9]+$/.test(val):
+                {   
+                    case sysParam.indexOf(val) != -1:
+                        htmlVal = val.replace(/ /g,'&nbsp;').replace(/[\r\n]/g,'</br>')
                         itemArr.push({
-                            "showVal":val,
-                            "type":"num",
-                            "domStr":"<span class='num'>" + val + "</span>",
+                            "showVal":sysParam,
+                            "type":"sysParam",
+                            "domStr":"<span class='sysParam c' etype='c'>" + val + "</span>",
                         })
-                        html += "<span class='num'>" + val + "</span>";
+                        html += "<span class='sysParam c' etype='c'>" + val + "</span>";
                         break
-                    case val == '&nbsp':
+                    case /^ $/.test(val):
                         itemArr.push({
                             "showVal":val,
                             "type":"nbsp",
-                            "domStr":"<span class='nbsp notFetch'>" + val + "</span>"
+                            "domStr":"<span class='nbsp notFetch'>&nbsp</span>"
                         })
-                        html += "<span class='nbsp notFetch'>" + val + "</span>";
+                        html += "<span class='nbsp notFetch'>&nbsp</span>";
                         break
-                    case val == '</br>':
+                    case /^[\r\n]$/.test(val):
                         itemArr.push({
                             "showVal":val,
                             "type":"br",
-                            "domStr":"<span class='br'>" + val + "</span>"
+                            "domStr":"<span class='br'></br></span>"
                         })
-                        html += "<span class='br notFetch'>" + val + "</span>";
+                        html += "<span class='br notFetch'></br></span>";
                         break
-                    case val == 'SUM([表达式])':
+                    case /^try$/gi.test(val):
                         itemArr.push({
                             "showVal":val,
-                            "type":"br",
-                            "domStr":"<span class='sum'>" + val + "</span>"
+                            "type":"try",
+                            "domStr":"<span class=''>"+val+"</span>"
                         })
-                        html += "<span class='sum'>" + val + "</span>";
+                        html += "<span class='notFetch keyWords'>"+val+"</span>";
                         break
-                    case /^[\+\-\*\/><=\(\)]$/.test(val)://+ - * / > < =
+                    case /^[\+\-\*\/><=\(\)]$/.test(val) || /(^>=$)|(^<=$)|(^==$)|(^!=$)|(\|\|)/.test(val):
+                        //+ - * / > < 
                         itemArr.push({
                             "showVal":val,
                             "type":"ysf",
-                            "domStr":"<span class='ysf'>" + val + "</span>"
+                            "domStr":"<span class='ysf y' etype='"+val+"'>" + val + "</span>"
                         })
-                        html += "<span class='ysf'>" + val + "</span>";
+                        html += "<span class='ysf y' etype='"+val+"' dtype='"+val+"'>" + val + "</span>";
                         break
-                    case /^\[.+\]$/.test(val):
+                    case /^[0-9.\-]+$/.test(val):
                         itemArr.push({
                             "showVal":val,
-                            "type":"col",
-                            "domStr":"<span class='col'>" + val + "</span>"
+                            "type":"num",
+                            "domStr":"<span class='n num' etype='n'>" + val + "</span>",
                         })
-                        html += "<span class='col'>" + val + "</span>";
+                        html += "<span class='num n' etype='n' dtype='N'>" + val + "</span>";
                         break
-                    case keyWords.indexOf(val.toLowerCase()) != -1:
+                    case /^\[[^\[]+\]$/.test(val) && /^\[[^\]]+\]$/.test(val):
+                        // []且中间不能有  [   或   ]
+                        if(measureStr.indexOf(val.substring(1,val.length-1)) != -1){
+                            htmlVal = val.replace(/ /g,'&nbsp;').replace(/[\r\n]/g,'</br>')
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"col",
+                                "domStr":"<span class='col m' etype='m' dtype='m'>" + htmlVal + "</span>"
+                            })
+                            html += "<span class='col m' etype='m' dtype='M'>" + htmlVal + "</span>";
+                            break
+                        }else{
+                            htmlVal = val.replace(/ /g,'&nbsp;').replace(/[\r\n]/g,'</br>')
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"col",
+                                "domStr":"<span class='col d' etype='d'>" + htmlVal + "</span>"
+                            })
+                            html += "<span class='col d' etype='d' dtype='D'>" + htmlVal + "</span>";
+                            break
+                        }
+                    case logicKeyWords.indexOf(val.toUpperCase()) != -1:
+                        if(val.toUpperCase() == "DOUBLE" || val.toUpperCase() == "INTEGER"){
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords expKeyWords' etype='l'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords expKeyWords' etype='l' dtype='L'>" + val + "</span>";
+                            break
+                        } else if(val.toUpperCase() == "VARCHAR"){
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords expKeyWords' etype='v'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords expKeyWords' etype='v' dtype='L'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "ELSE"){
+                            itemArr.push({
+                                //验证else后的参数而分开的
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords expKeyWords' etype='l' dataelse='g'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords expKeyWords' etype='l' dtype='L' dataelse='g'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "THEN"){
+                            //验证then后的参数而分开的
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords expKeyWords' etype='l' dataelse='h'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords expKeyWords' etype='l' dtype='L' dataelse='h'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "NULL"){
+                            //验证null后的参数而分开的
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords expKeyWords' etype='l' dataelse='u'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords expKeyWords' etype='l' dtype='L' dataelse='u'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "IF"){
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords' etype='f'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords' etype='f' dtype='L'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "FALSE" || val.toUpperCase() == "TRUE"){
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords' etype='b'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords' etype='b' dtype='L'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "NOT"){
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords' etype='!'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords' etype='!' dtype='L'>" + val + "</span>";
+                            break
+                        }else if(val.toUpperCase() == "AND"||val.toUpperCase() == "OR"){
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords' etype='l'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords' etype='o' dtype='L'>" + val + "</span>";
+                            break
+                        }else{
+                            itemArr.push({
+                                "showVal":val,
+                                "type":"keyWords",
+                                "domStr":"<span class='keyWords logicKeyWords' etype='l'>" + val + "</span>"
+                            })
+                            html += "<span class='keyWords logicKeyWords' etype='l' dtype='L'>" + val + "</span>";
+                            break
+                        }
+                    case jhKeyWords.indexOf(val.toUpperCase()) != -1:
                         itemArr.push({
                             "showVal":val,
                             "type":"keyWords",
-                            "domStr":"<span class='keyWords'>" + val + "</span>"
+                            "domStr":"<span class='keyWords j' etype='j'>" + val + "</span>"
                         })
-                        html += "<span class='keyWords'>" + val + "</span>";
+                        html += "<span class='keyWords expKeyWords j' etype='j' dtype='J'>" + val + "</span>";
+                        break
+                    case ',' == val:
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords commer' etype=','>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords commer' etype=',' dtype=','>" + val + "</span>";
                         break  
-                    case /^'[^'"]+'$/.test(val) :
+                    // dtype='I' 表达式名称 返回值为n
+                    case 'POWER' == val.toUpperCase() || 'ROUND' == val.toUpperCase() || 'LOG' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords T2' etype='T2'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords T2' etype='T2' dtype='I'>" + val + "</span>";
+                        break
+                    case 'ABS' == val.toUpperCase() || 'CEIL' == val.toUpperCase() || 'FLOOR' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords T1' etype='T1'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords T1' etype='T1' dtype='I'>" + val + "</span>";
+                        break
+                    // dtype P表达式返回类型s
+                    case 'SUBSTR' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords T3' etype='T3'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords T3' etype='T3' dtype='P'>" + val + "</span>";
+                        break
+                    case 'REPLACE' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords T4' etype='T4'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords T4' etype='T4' dtype='P'>" + val + "</span>";
+                        break 
+                    case 'LENGTH' == val.toUpperCase() ||'LOWER' == val.toUpperCase() ||'UPPER' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords T5' etype='T5'>" + val + "</span>"
+                        })
+                        if('LENGTH' == val.toUpperCase()){
+                            html += "<span class='keyWords expKeyWords T7' etype='T7' dtype='I'>" + val + "</span>";
+                        }else{
+                            html += "<span class='keyWords expKeyWords T5' etype='T5' dtype='P'>" + val + "</span>";
+                        }
+                        break
+                    // 特殊处理   varchar  double integer   E
+                    case 'TRY_CAST' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords T6' etype='T6'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords T6' etype='T6' dtype='E'>" + val + "</span>";
+                        break  
+                    case 'DATE_FORMAT' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords X7' etype='X8'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords X1' etype='X8' dtype='T'>" + val + "</span>";
+                        break
+                    case 'DATE_PARSE' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"keyWords",
+                            "domStr":"<span class='keyWords X9' etype='X9'>" + val + "</span>"
+                        })
+                        html += "<span class='keyWords expKeyWords X9' etype='X9' dtype='T'>" + val + "</span>";
+                        break
+                    case 'NOW' == val.toUpperCase():
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"now",
+                            "domStr":"<span class='now' etype='now'>" + val + "</span>"
+                        })
+                        html += "<span class='now' etype='now'>" + val + "</span>";
+                        break  
+                    case /'%Y[\-\/]%m[\-\/]%d'?(%T')?/gi.test(val.replace(/\s/gi,"")):
+                        var etype = val.substring(1,val.length-1)
                         itemArr.push({
                             "showVal":val,
                             "type":"str",
-                            "domStr":"<span class='str'>" + val + "</span>"
+                            "domStr":"<span class='str' etype='"+etype+"'>" + val + "</span>"
                         })
-                        html += "<span class='str'>" + val + "</span>";
+                        html += "<span class='str' etype='"+etype+"' dtype='S'>" + val + "</span>";
+                        break
+                    //DATA_PARSE('2017-02-14','%Y-%m-%d') DATE_PARSE('2017/02/14 18:30:15','%Y/%m/%d %T') 
+                    case /\d{4}[\/-]\d{2}[\/-]\d{2}(\d{2}:\d{2}\d{2})?/gi.test(val.replace(/\s/gi,"")):
+                        var etype = val.substring(1,val.length-1)
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"str",
+                            "domStr":"<span class='str' etype='"+etype+"'>" + val + "</span>"
+                        })
+                        html += "<span class='str' etype='"+etype+"' dtype='S'>" + val + "</span>";
+                        break        
+                    case /^'[^'"]*'$/.test(val) :
+                        htmlVal = val.replace(/ /g,'&nbsp;').replace(/</gi,"&lt").replace(/>/gi,"&gt").replace(/>=/gi,"&ge").replace(/<=/gi,"&le").replace(/[\r\n]/g,'</br>');
+                        itemArr.push({
+                            "showVal":val,
+                            "type":"str s",
+                            "domStr":"<span class='str s' etype='s'>" + htmlVal + "</span>"
+                        })
+                        html += "<span class='str s' etype='s' dtype='S'>" + htmlVal + "</span>";
                         break              
                     default:
-                        // 默认为illegal str类型   str类型是为了 在验证时取出来判断是否有'' 加的
+                        // 默认为illegal str类型   str类型是为了 在验证时取出来判断是否有'' 加的\
+                        htmlVal = val.replace(/ /g,'&nbsp;').replace(/</gi,"&lt").replace(/>/gi,"&gt").replace(/>=/gi,"&ge").replace(/<=/gi,"&le").replace(/[\r\n]/g,'</br>');
                         itemArr.push({
                             "showVal":val,
                             "type":"illegal str",
-                            "domStr":"<span class='illegal str'>" + val + "</span>"
+                            "domStr":"<span class='illegal f' etype='f'>" + htmlVal + "</span>"
                         })
-                        html += "<span class='illegal str'>" + val + "</span>";
+                        html += "<span class='illegal f' etype='f'>" + htmlVal + "</span>";
                 }
             })
             resultObj = {
@@ -386,16 +1032,17 @@
             }
             return resultObj;
         },
-        createJspzHtml:function(htmlObj,contentDomId){//htmlObj:changeToHTMLData返回结果数据 contentDomId: id
+        createJspzHtml:function(htmlObj,contentDomId){
+            //htmlObj:changeToHTMLData返回结果数据 contentDomId: id
             var html = htmlObj.html;
             $("#" + contentDomId).html(html);
             //同步滚动条
             $("#showArea").scrollLeft($("#editArea").scrollLeft())
             $("#showArea").scrollTop($("#editArea").scrollTop())
         },
-        insertText:function(obj,str){//document.getElementById('text')  obj
+        insertText:function(obj,str){
+            //document.getElementById('text')  obj
             var that = this;
-            str = " " + str + " "
             if (document.selection) {
                 var sel = document.selection.createRange();
                 sel.text = str;
@@ -410,13 +1057,12 @@
             } else {
                 obj.value += str;
             }
-            //插入文字后更新模拟的showDiv
-            var a = $("#editArea").val().replace(/\n/g, "~/~</br>~/~").replace(/ /g,"~/~&nbsp~/~").split("~/~"); //, 获取值并分割成数组
+            // 获取值并分割成数组
+            a = $("#editArea").val().match(that.splitReg);
             var htmlData = that.changeToHTMLData(a);
             that.createJspzHtml(htmlData,"showArea");
         },
         hideSelected:function(dom){
-            // var dom = $(this).siblings(".selectList")
             $(document).unbind("click").bind("click", function (e) {
                 var target = $(e.target);
                 if (dom) {
@@ -431,242 +1077,7 @@
                 dom.hide();
             });
         }
-    }//calculation end
+    }
+    //calculation end
     calculation.init();
 </script>
-<!-- <script type="text/javascript">
-var data1 = $("#formContainer").getPageData();
-var $form = $("#formContainerSize");
-var sizeCont = {
-    init: function() {
-        var that = this;
-        that.isUpdate();
-        that.createCol();
-        that.delCLick();
-        that.clickSymbol();
-        that.clickTerm();
-    },
-    // 判断是否是跟新 
-    isUpdate: function() {
-
-        var that = this;
-        if (data1.page == "update") {
-            $("[name=cubeId]", $form).remove();
-            /*      $form.append('<input  type="text" class="form-control" required  name="id"   style="display:none" value="'+data1.id+'">') */
-            $form.append('<input  type="text" class="form-control" required  name="id"   style="display:none" value="' + data1.cubeId + '">');
-
-            //  dac.request({
-            //   url:$$("/measureAndDimension/getCalculateMeasure.json"),
-            //   type:"POST",
-            //   data:{id:data1.id},
-            //   success:function(d){
-            //    if(d.data.returnCode=="20000"){
-            //       dac.buildFormValue($form,d.data.result);
-            //       $("#actualFormula",$form).val(d.data.result.extend5);
-            //       var actualFormula=d.data.result.extend5.split("#$#");
-            //       var span="";
-
-            //       for(var i=1;i<actualFormula.length;i++){
-            //         if(actualFormula[i].indexOf(".")>0){
-            //           span+='<span class="c-text" caption="'+actualFormula[i].split(".")[2]+'" table="'+actualFormula[i].split(".")[0]+'" ><span class="c-text1" columnName="'+actualFormula[i].split(".")[1]+'">'+actualFormula[i].split(".")[2]+'</span><span class="del">x</span></span>';
-            //         }else{
-            //           span+='<span class="c-text ysf"><span class="c-text1">'+actualFormula[i]+'</span><span class="del">x</span></span>';
-            //         }
-            //       }
-            //       $("#jsgs",$form).append(span);
-            //     }else{
-            //       dac.alert("请求失败!");    
-            //     }
-            //   }
-            // }); 
-
-            // 
-            // if(data1.cubeId!="" && !$("li.create-size",$tagertR).data().sizeData){
-            //   // 存储数据源ID
-            //   $("[name=cubeId]",$form).val(data1.cubeId);
-            //   dac.request({
-            //     url:$$("/measureAndDimension/getMeasure.json"),
-            //     type:"POST",
-            //     data:{
-            //       cubeId:data1.cubeId
-            //     },
-            //     success:function(d){
-            //       if(d.data.returnCode=="20000"){
-            //         dac.buildFormValue($form,d.data.result);
-            //         $("#actualFormula",$form).val(d.data.result.extend5);
-            //         that.updateInit(d.data.result);
-            //       }else{
-            //         dac.alert("请求失败!");    
-            //       }
-            //     }
-            //   });
-            // } else {
-            //   var lookDat = $("li.create-size",$tagertR).data().sizeData().look[0];
-            //   $("#actualFormula",$form).val(lookDat.formula);
-            //   $("input[name=caption]").val(lookDat.name);
-            //   that.updateInit(lookDat);
-            // }
-        }
-    },
-    updateInit: function(data) {
-        var actualFormula = data.formula.split("#$#");
-        var span = "";
-        for (var i = 1; i < actualFormula.length; i++) {
-            if (actualFormula[i].indexOf(".") >= 0) {
-                span += '<span class="c-text" caption="' + actualFormula[i].split(".")[2] + '" table="' + actualFormula[i].split(".")[0] + '" ><span class="c-text1" columnName="' + actualFormula[i].split(".")[1] + '">' + actualFormula[i].split(".")[2] + '</span><span class="del">x</span></span>';
-            } else {
-                span += '<span class="c-text ysf"><span class="c-text1">' + actualFormula[i] + '</span><span class="del">x</span></span>';
-            }
-        }
-        $("#jsgs", $form).append(span);
-    },
-    // 生成 主表列表名称 表格
-    createCol: function(data) {
-        // 
-        // dac.request({
-        //   url:$$("/measureAndDimension/getMeasure.json"),
-        //   type:"POST",
-        //   data:{
-        //     cubeId:data1.data.cubeId
-        //   },
-        //   success:function(d){
-        //     if(d.data.returnCode=="20000"){
-        //       data = d.data.result.measureDimensions; 
-        //     }else{
-        //       dac.alert("请求失败!");
-        //     }
-        //   }
-        // }); 
-        // var data = $("table.table-thead", $tagertR).data().dimensions ? $("table.table-thead", $tagertR).data().dimensions().columns : [];
-        var data =  $tagertR.data().dimensions ? $tagertR.data().dimensions().columns : [];
-        var tr = "";
-        for (var i = 0; i < data.length; i++) {
-            // $(".data-table", $tagert).attr("ename") == data[i].sourceTable
-            if (data[i].type == "measure" && data[i].measureType!=2) {
-                var columnName = data[i].name || data[i].name == "" ? data[i].name : data[i].columnName;
-                    if(data[i].sqlTable == true || $tagertL.data().getPageData().type =="4"){
-                       var sourceAlias = data[i].sourceTableAlias || data[i].sourceTable;
-                    }else{
-                       sourceAlias = data[i].sourceTable || data[i].sourceTableAlias;
-                    }
-                    var sourceTable = data[i].sourceTable ? data[i].sourceTable : "--";
-                tr += '<tr sourceTableAlias ="'+data[i].sourceTableAlias+'" sqlTable="'+ data[i].sqlTable+'" sourceTablePrefix="'+ data[i].sourceTablePrefix +'"><td><span class="data-size" caption="' + data[i].name + '" columnName="' + data[i].columnName + '" tableName="' + sourceTable + '">' + columnName + '</span></td><td sourceTable="' + sourceTable + '">' + sourceAlias + '</td></tr>';
-            }
-        }
-        if (tr == "") {
-            $form.find("#createCol").remove();
-            $("<p class='loading-table'>暂无数据</p>").appendTo($form.find("#table3Box").show());
-        } else {
-            $(tr).appendTo($form.find("#createCol"));
-        }
-
-
-        // $("#jsgs", $form).mCustomScrollbar({
-        //      theme:"dark",
-        //      axis: "y",
-        //      //advanced:{ updateOnContentResize: true }
-        //   });
-    },
-    // 点击删除 已选公式
-    delCLick: function() {
-        $form.find("#jsgs").on("click", ".del", function() {
-            $(this).parent().remove();
-            var spanText = "",
-                spanText1 = "";
-            $("#jsgs").find(".c-text1").each(function(i, v) {
-                if ($(v).parent().hasClass("ysf") && $(v).parent().hasClass("division")) {
-                    //nullif(value1, value2)
-                    spanText += $(v).text();
-                    spanText1 += '#$#nullif(' + $(v).text() + ',0)#$#';
-                } else if($(v).parent().hasClass("ysf")){
-                    spanText += $(v).text();
-                    // spanText1 += '#$#' + $(v).text() + '#$#';  测试不加#$#
-                    spanText1 +=  $(v).text() ;
-                } else {
-                    if($(v).parent().attr("sqltable") == "true"){
-                       spanText += '[Measures]' + '.[' + $(v).parent().attr("caption") + ']';
-                        spanText1 += "if (\"" + $(v).parent().attr("sourceTableAlias")  +"\".\"" +$(v).attr("columnName") + "\" is null , 0 , TRY_CAST(\"" + $(v).parent().attr("sourceTableAlias")  +"\".\"" +$(v).attr("columnName") + "\" AS $REAL$))";
-                    }else{
-                        spanText += '[Measures]' + '.[' + $(v).parent().attr("caption") + ']';
-                        spanText1 += "if (\"" + $(v).parent().attr("sourcetableprefix") + "_" + $(v).parent().attr("table") +"\".\"" +$(v).attr("columnName") + "\" is null , 0 ,TRY_CAST(\"" + $(v).parent().attr("sourcetableprefix") + "_" + $(v).parent().attr("table") +"\".\"" +$(v).attr("columnName") + "\" AS $REAL$))";
-                         // + $(v).parent().attr("caption");
-                    }
-                }
-            });
-
-            $form.find("#actualFormula").val(spanText1);
-            $form.find("#jsgsInput").val(spanText);
-            //$("#jsgs", $form).mCustomScrollbar("update");
-        })
-    },
-    // 点计算法 符号
-    clickSymbol: function() {
-        $form.on("click", ".data-size", function() {
-            var text1, text, columnName = $(this).attr("columnName") || "";
-            var $leftList = $tagertL.data().getPageData();
-            var span = $('<span class="c-text"><span class="c-text1" columnName="' + columnName + '">' + $(this).text() + '</span></span>').append($('<span class="del">x</span>')).appendTo($("#jsgs", $form));
-            if ($(this).parent().hasClass("col-md-4")) {
-                if($(this).parent().hasClass('division')){
-                    span.addClass('division');
-                }
-                span.addClass("ysf");
-                text = $.trim($("#jsgs").find(".c-text1").last().text());
-                if($(this).parent().hasClass('division')){
-                    //nullif(value1, value2)
-                    text1 = $.trim($form.find("#actualFormula").val()) + "#$#nullif(" + $("#jsgs").find(".c-text1").last().text() + ",0)#$#";
-                }else{
-                    // text1 = $.trim($form.find("#actualFormula").val()) + "#$#" + $("#jsgs").find(".c-text1").last().text() + "#$#";  测试不加#$#
-                    text1 = $.trim($form.find("#actualFormula").val()) + $("#jsgs").find(".c-text1").last().text();
-                }
-            } else {
-                span.attr("sourcetableprefix", $(this).parents("tr").attr("sourcetableprefix"));
-                span.attr("table", $(this).parent().next().attr("sourceTable"));
-                span.attr("caption", $(this).attr("caption"));
-                span.attr("sqltable",$(this).parents("tr").attr("sqltable"));
-                span.attr("sourceTableAlias",$(this).parents("tr").attr("sourceTableAlias"))
-                var tableName = $(this).attr("tableName");
-                var symbol = '\"';
-                var dbTypes = $leftList.type;
-                if (dbTypes == "1") {
-                    text = '\'' + tableName + '\'' + '.\'' + $(this).attr("caption") + '\'';
-                } else {
-                    text = '\"' + tableName + '\"' + '.\"' + $(this).attr("caption") + '\"';
-                }
-                //symble改为"分
-                if (dbTypes == 1 || dbTypes == 11) {
-                    symbol = "\"";
-                }
-                if($(this).parents("tr").attr("sqltable") == "true"){
-                    // text1 = $.trim($form.find("#actualFormula").val()) + "TRY_CAST(" + symbol + $(this).parents("tr").attr("sourceTableAlias")  + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol + " AS $REAL$)";
-                    text1 = $.trim($form.find("#actualFormula").val()) + "if ("+ symbol + $(this).parents("tr").attr("sourceTableAlias")  + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol +" is null , 0 , TRY_CAST(" + symbol + $(this).parents("tr").attr("sourceTableAlias")  + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol + " AS $REAL$))";
-                }else{
-                    text1 = $.trim($form.find("#actualFormula").val()) + "if ("+ symbol + $(this).parents("tr").attr("sourcetableprefix") + "_" + $.trim($(this).parent().next().attr("sourceTable")) + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol +" is null , 0 , TRY_CAST(" + symbol + $(this).parents("tr").attr("sourcetableprefix") + "_" + $.trim($(this).parent().next().attr("sourceTable")) + symbol + '.' + $.trim(symbol + $.trim($("#jsgs").find(".c-text1").last().attr("columnName"))) + symbol + " AS $REAL$))";
-                }
-                
-                // +"."+$(this).attr("caption"));
-            }
-
-            $form.find("#actualFormula").val(text1);
-            $form.find("#jsgsInput").val($form.find("#jsgsInput").val() + text);
-            //加滚动条
-            $("#jsgs", $form).mCustomScrollbar("destroy");
-            $("#jsgs", $form).mCustomScrollbar({
-                theme:"dark",
-                axis: "y",
-                advanced:{ updateOnContentResize: true }
-            });
-        });
-    },
-    // 点击 条件框
-    clickTerm: function() {
-        // $("#jsgs",$form).on("click",function(e){
-        //   if(e.target.id=="jsgs"){
-        //     dac.alert("请选择数据字段!");
-        //   }
-        // });
-    }
-};
-sizeCont.init();
-
-</script>
- -->

@@ -40,6 +40,37 @@ top:25px;
 .str{
 	color:green;
 }
+#parent{
+	width: 500px;
+	height: 500px;
+	border:1px solid red;
+	position: relative;
+}
+#ch{
+	width: 100px;
+	height: 200px;
+	background: orange;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+}
+#fp{
+	overflow: hidden;
+}
+#l{
+	float: left;
+	width: 300px;
+	height: 200px;
+
+}
+#r{
+	float: right;
+	width: 200px;
+	height: 200px;
+}
 </style> 
 </head> 
 <body> 
@@ -51,15 +82,25 @@ top:25px;
 <code>123</code>
 <div>111</br>111</div>
 <div class="tst">透明</div>
+<div id="parent">
+	<div id="ch"></div>
+</div>
 br
 <span></br></span>
 br
 <textarea name="" id="tx" cols="30" rows="10"></textarea>
 </div>
 showDiv: 
-<div id="showDiv"></div>
+<div id="showDiv">
+	
+</div>
+<div id="fp">
+	<div id="l"></div>
+	<div id="r"></div>
+</div>
 </body> 
 <script>
+// a.match(/(SUM)|(\[[^\[]+\])|(IF)|(\+)|([0-9]+)|(\'[^\']+\')|([a-zA-Z]+)|(\s)|(\n)|(\()|(\))|([^\']+)/g)
 // at.js
 var a  = ""
 var el = document.getElementById("tx") 
@@ -111,7 +152,6 @@ var el = document.getElementById("tx")
 					html += "<span class='str'>" + val + "</span>";
 			}
 		})
-		debugger
 		resultObj = {
 			"html":html,
 			"itemArr":itemArr
@@ -122,6 +162,46 @@ var el = document.getElementById("tx")
 		var html = htmlObj.html;
 		$("#" + contentDomId).html(html);
 	}
+	
+function insertText(obj,str) {//document.getElementById('text')  obj
+	if (document.selection) {
+	    var sel = document.selection.createRange();
+	    sel.text = str;
+	} else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
+	    var startPos = obj.selectionStart,
+	        endPos = obj.selectionEnd,
+	        cursorPos = startPos,
+	        tmpStr = obj.value;
+	    obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+	    cursorPos += str.length;
+	    obj.selectionStart = obj.selectionEnd = cursorPos;
+	} else {
+	    obj.value += str;
+	}
+}
+//全角半角校验
+function issbccase(strTmp) {
+ for (var i=0; i<strTmp.length; i++) { 
+  if (strTmp.charCodeAt(i) > 128){
+   return true; 
+   break; 
+  }
+ }
+ return false;
+}
+// function moveEnd(obj){
+// 	obj.focus();
+// 	var len = obj.value.length;
+// 	if (document.selection) {
+// 	    var sel = obj.createTextRange();
+// 	    sel.moveStart('character',len);
+// 	    sel.collapse();
+// 	    sel.select();
+// 	} else if (typeof obj.selectionStart == 'number' && typeof obj.selectionEnd == 'number') {
+// 	    obj.selectionStart = obj.selectionEnd = len;
+// 	}
+// }
+
 	// function getValType(str){
 	// 	var valType = ""
 	// 	//num  数字
@@ -215,6 +295,196 @@ var el = document.getElementById("tx")
 
 //     )();
 // }
+
+
+// str.match(/(mount\/国标网关\/\d+)/g)
+// 测试括号
+var str = "SUM([cube大小] + [记录条数]) - (AVG([cube大小]) + COUNT([记录条数])) - 1"
+var str1 = "(一a(二b(三c)(三c1(四)))(二d)(二e))"
+var str2 = "j(m+m)-(j(m)+j(m))-n"
+var str3  ="j(m+m)-(j(m)+j(m))-n+T6(see)-T5(s)+T6(see)"
+var str4 = "j(m+m)-sum((j(m)+1)-n)"
+// "T2(n,n)+j(n+T2(n,n)-n+(n-T2(j(n)-T2(n,n))))"
+    function getBracketsStrByLevel(str){
+        var l = [];
+        var r = [];
+        for(var i in str){
+            if(str[i] == "("){
+                l.push(i-0)
+            }
+            if(str[i] == ")"){
+                r.push(i-0)
+            }
+        }
+        l = l.reverse()
+        // 括号配对
+        var bracketIdxArr = [];
+        var levelStr = "";
+        for(var j in l){
+            for(var k in r){
+                if(r[k] > l[j]){
+                    levelStr = str.substring(0,l[j] + 1);
+                    bracketIdxArr.push({
+                        idx:[l[j],r[k]],
+                        level:levelStr.match(/\(/g).length - (levelStr.match(/\)/g) ? levelStr.match(/\)/g).length : 0),//括号层级
+                        str:str.substring(l[j]+1,r[k])
+                    });
+                    console.log(str.substring(l[j]+1,r[k]))
+                    r.splice(k,1,-1)
+                    break   
+                }
+            }
+        }
+        bracketIdxArr.push({
+            idx:[l[j],r[k]],
+            level:0,//括号层级
+            str:str.substring(0)
+        })
+        bracketIdxArr = bracketIdxArr.sort(function(a,b){
+            return b.level - a.level
+        })
+        // 将同一层的放到一个数组
+        var resultArr = [];
+        var obj = {}
+        $.each(bracketIdxArr,function(){
+            if(obj[this.level] == null){
+                obj[this.level] = resultArr.push(this)
+            }else{
+                resultArr[resultArr.length - 1].str = resultArr[resultArr.length - 1].str + "," + this.str
+            }
+        })
+        return resultArr
+    }
+var regArr = [];
+function getRegArr(str){
+	var reg = /\(([^\(\)\"]*\"[^\"]*\")+[^\(\)\"]*\)|\([^\(\)]*\)/gi;//取最里层括号 引号中的不取
+	// var newStr = "";
+	if(str.match(reg)){
+		regArr = regArr.concat(str.match(reg));
+		str = str.replace(reg,"");
+		getRegArr(str)
+	}else{
+		return 
+	}
+}
+// 配对括号
+// {
+// 	内容：‘abc’,
+// 	idx: 3,//左括号的index
+// 	内容计算后的值类型：number/col/str/time
+// }
+// 计算出括号中的值
+// 找到(，判断前面的公式是否能用此类型
+// "T2(n,n)+j(n+T2(n,n)-n+(n-T2(j(n)-T2(n,n))))"
+            // 1 找2的u=index取括号配对  2 替换里面的变量  3 验证
+            // power(1,2) + sum(1 +log(4,2)- 4+(3- round(sum(2) - power(2+2-sum(2-1),9-4)+4-5)))
+            // function findStrArr(str,searchVal){//str是表达式  searchVal是要匹配的()前的字  T(....)
+            //     // var searchVal = "2";
+            //     // var str = "T2(n,n)+j(n+T2(n,n)-n+(n-T2(j(n)-T2(n+n-j(n),n)+n-n)))";
+            //     var childStr = "";
+            //     var strArr = [];
+            //     for(var i in str){
+            //         if(str[i] == searchVal){
+            //            childStr = str.slice(i);
+            //            // strArr.push(str.slice(i))
+            //            strArr.push(getLastBracketStr(childStr))
+            //         }
+            //     }
+            //     console.log(strArr)
+            //     return strArr
+            // }
+            // // expString要先替换最小单位  满足验证的最小单位
+            // var testArr  = findStrArr(expString,"2");
+            
+            //返回的是T2(....)括号中的内容T2要满足T2(n,n)，即验证(要先替换:只取公式的关键验证判断类型，不管公式内部，内部已经单独验证)testArr是否为n,n格式
+            // T1---n  T2----n  T3---s T4----s T5----s(特殊处理length) T6----n(特殊处理varchar) X1 X2为时间 
+            // 替换关键：T(......)
+            // function getLastBracketStr(childStr){//取searchChar括号里的内容
+            //     if(!childStr) return;
+            //     var endIdx = 0;
+            //     var lB = 0,rB = 0;
+            //     for(var j = 0;j<childStr.length;j++){
+            //        if(childStr[j] == "("){
+            //             lB++;
+            //         }
+            //         if(childStr[j] == ")"){
+            //             rB++;
+            //         }
+            //         if(lB == rB && lB != 0){
+            //             endIdx = j
+            //             break;
+            //         }
+            //     }
+            //     return childStr.slice(2,endIdx);
+            // }
+
+
+
+
+
+
+            validatorCal:function(exp){//验证公式内部计算值
+            var that = this;
+            var expArr = that.getBracketsStrByLevel(exp);
+            for(var i in expArr){
+                // var thisLevelExp = this.str;
+                var thisLevelExpArr = expArr[i].str.split(",");
+                $.each(thisLevelExpArr,function(idx){
+                    var thisExpStr = this 
+                     //当前表达式  去替换上一层的
+                    // var thisLevelCalType = fn(this)  //  fn(this)应返回计算结果类型
+                    // 正则替换 (thisExpStr)
+                    // expArr[i + 1].str = expArr[i + 1].str.replace(thisExpStr,thisLevelCalType) // expArr[i + 1] 不能超出数组长度
+                })
+            }
+            
+            function fn(str){
+                // "j(m+m)-(j(m)+j(m))-n+T6(see)-T5(s)+T6(see)"
+                // m+m-j(m) || 3
+                //j(m) ||  * / + -  
+                // d m s n
+                var result = {
+                    msg:"",
+                    state:true
+                }
+                // 优先匹配出关键字代表 直接替换成结果   在之前已经验证过了
+
+
+                if(str.indexOf("||") != -1){
+                    switch (true){
+                        case /[mn]/.test(str):
+                            result = {
+                                msg:$i18n("js_calculation_js_31"),
+                                state:false    
+                            }
+                            return result
+                        break
+                    }
+                }
+            }
+            // .................循环每一层（循环中将当前式子转换成一个值类型，去替换上一(多个值循环)层的每一个匹配的字符）  
+            // fn(ysf){
+            //     switch(ysf){
+            //         case * :
+            //     }
+            // }
+
+            // 循环expArr一个一个替换
+            // h聚合后的结果
+            //一、 (j(m)-j(m) + j(m))/j(m) AS VARCHAR    1.取j(m)    2.验证j(m)j(m)j(m)通过后替换为h+h+h 3.h+h+h验证后替换为h + h
+            // 4.h+h验证后替换为h 直到表达式中没有运算符为止，将没有运算符的子串替换到母串中 
+            //二、 (h)/j(m) AS VARCHAR
+            // (SUM(   m    )-SUM(  m   ))/SUM([数量]) AS VARCHAR
+            // (      j      -      j    )/SUM([数量]) AS VARCHAR
+            // (             j           )/SUM([数量]) AS VARCHAR
+            // (             j           )/SUM([数量]) AS VARCHAR
+            
+        },
+
+
+
+
+            
 </script>
 </html> 
 <!-- <script type="text/javascript" >
