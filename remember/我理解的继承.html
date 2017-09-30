@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<!-- http://www.cnblogs.com/ayqy/p/4471638.html -->
+	<script>
+		function Parent(){
+			// 私有基本属性
+			var p1 = 1;
+			// 私有引用属性
+			var p1Arr = [1];
+			// 私有函数   引用属性
+			function fn(){
+				console.log('pfn');
+			}
+			// 实例基本属性
+			this.val = 'val1';
+			// 实例引用属性
+			this.arr = ['arr1'];
+			// 实例函数  引用属性
+			this.fn = function(){
+				console.log('tfn')
+			}
+		}
+
+
+
+
+
+
+		// function beget(obj){   // 生孩子函数 beget：龙beget龙，凤beget凤。
+		//     var F = function(){};
+		//     F.prototype = obj;
+		//     return new F();
+		// }
+		// function Super(val){
+		//     // 只在此处声明基本属性和引用属性
+		//     this.val = val;
+		//     this.arr = [1];
+		// }
+		// //  在此处声明函数
+		// Super.prototype.fun1 = function(){};
+		// Super.prototype.fun2 = function(){};
+		// //Super.prototype.fun3...
+		// function Sub(){
+		//     Super.call(this);   // 核心
+		//     // ...
+		// }
+		// var proto = beget(Super.prototype); // 核心
+		// proto.constructor = Sub;            // 核心
+		// Sub.prototype = proto;              // 核心
+		 
+		// var sub = new Sub();
+		// alert(sub.val);
+		// alert(sub.arr);
+
+
+
+		// 封装寄生组合式继承
+		function newChild(parent,options){
+			function beget(obj){
+			    var F = function(){};
+			    F.prototype = obj;
+			    return new F();
+			}
+			function child(optios){
+				parent.call(this,options)
+			};
+			var proto = beget(parent.prototype); // 核心
+			proto.constructor = child;            // 核心
+			child.prototype = proto;              // 核心
+			return new child(options)
+			// return child
+		}
+
+
+
+		// 父类
+		function Super(val){
+		    // 只在此处声明基本属性和引用属性
+		    this.val = val;
+		    this.arr = [1];
+		}
+		Super.prototype.fun1 = function(){
+			console.log(this.val.name)
+		};
+		Super.prototype.fun2 = function(){};
+
+
+		// 子继承 并创建实例
+		var options1 = {
+			name:"child1"
+		}
+		var options2 = {
+			name:"child2"
+		}
+		var sub1 = newChild(Super,options1)
+		var sub2 = newChild(Super,options2)
+		console.log(sub1)
+		console.log(sub2)
+
+
+
+
+
+
+		// 
+		var options3 = {
+			name:"child3"
+		}
+		Sub3 = function(){};
+		Sub3.prototype = new Super(options3);
+		var sub3 = new Sub3()
+		console.log(sub3)
+		console.log(sub3.val)
+		console.log(sub3.fun1())
+	</script>
+</body>
+</html>

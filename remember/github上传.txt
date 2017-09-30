@@ -12,3 +12,8 @@
  git add . (更新本地仓库全部文件)git add filename:更新某个文件
  git commit -m "-m是添加注释"  提交当前目录到本地仓库
  git push origin master 上传到远程仓库
+
+
+
+
+ git remote add origin https://github.com/kenhlam/GGsmida.git设置远程仓库地址

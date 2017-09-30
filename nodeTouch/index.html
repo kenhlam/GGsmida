@@ -1,0 +1,66 @@
+<html>
+<script src="jquery-1.8.0.js"></script>
+
+<body>
+<form action="http://127.0.0.1:8081/process_get" method="GET">
+First Name: <input type="text" name="first_name">  <br>
+ 
+Last Name: <input type="text" name="last_name">
+<input type="submit" value="Submit">
+<div id="ck">CLICK</div>
+<div id="getpic">downPic</div>
+</form>
+
+<button id="getSql">点击查询sql</button>
+<textarea name="" id="sqlVal" cols="30" rows="10"></textarea>
+<table id="result">
+
+</table>
+
+</body>
+</html>
+<script>
+	$("#ck").click(function(){
+		$.get('get').success(function(data){
+			console.log(data);
+		})
+	})
+	$("#getpic").click(function(){
+		$.ajax({
+			"Content-disposition": "attachment",
+			"url":"/getpic",
+			"type":"get"
+		}).success(function(data){
+			alert("downLoaded");
+		})
+	})
+	// select * from tjh.tjh_department where saleroom > 100
+	// select * from tjh.tjh_department where saleroom > 1000 and direct_supervisor = '经理1'
+	$("#getSql").click(function(){
+		var data = {
+			sqlVal:$("#sqlVal").val()
+		}
+		$.ajax({
+			"url":"sql",
+			"type":"post",
+			"dataType":"JSON",
+			"data":data
+		}).success(function(data){
+			console.log(data)
+			$("#result").html("")
+			var html = "",head = "",body = "";
+			for(var i in data.cols){
+				head += "<td>" + data.cols[i] + "</td>"
+			}
+			head = "<tr>" + head + "</tr>"
+			$("#result").append($(head))
+			for(var i in data.data){
+				for(var j in data.data[i]){
+					body += "<td>" + data.data[i][j] + "</td>"
+				}
+				body = "<tr>" + body + "</tr>"
+				$("#result").append($(body))
+			}
+		})
+	})
+</script>

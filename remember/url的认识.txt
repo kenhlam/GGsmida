@@ -1,0 +1,6 @@
+?连接作用   前面是域名，后边是参数
+&接连参数
+#不发送服务器 本地hash跳转，页面间跳转
+
+http://10.0.3.131:8086/analystui/?debug=true#/designer
+http://10.0.5.79:8088/analystui/#/project
